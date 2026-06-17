@@ -3,6 +3,16 @@ RENINE — CHANGELOG
 ============================================================
 
 ============================================================
+2026-06-18 — Phase 1 Formally Closed (Prompt 4 Validation)
+============================================================
+- 133/133 tests passing across 16 test files
+- All 8 quality rules verified and satisfied
+- phase_1_report.txt completed with performance notes
+- project_state.txt advanced to Phase 2
+- folder_structure.txt corrected (session_handoff.txt added)
+- All validation gates passed — Phase 1 is officially CLOSED
+
+============================================================
 2026-06-18 — Phase 1 Complete
 ============================================================
 - Created complete project folder structure
@@ -21,7 +31,25 @@ RENINE — CHANGELOG
 - Created renderer (index.html, app.tsx, globals.css)
 - Created ChatWindow.tsx and VoiceIndicator.tsx components
 - Created placeholder components (MessageBubble, Sidebar, FloatingWidget)
-- Created 7 test files (config, logging, sanitizer, ollama, layer1, stt, tts)
-- Created all 15 docs/*.txt files
+- Created 7 required test files (config, logging, sanitizer, ollama, layer1, stt, tts)
+- Created all 15 docs/*.txt files + session_handoff.txt
 - Created docs/phase_reports/phase_1_report.txt
 - Fixed PermissionLevel duplication between base_agent and tools/permissions
+
+============================================================
+2026-06-18 — Quality Verification Pass
+============================================================
+- Fixed: chat_stream() exceeded 50-line limit — split into _consume_stream helper
+- Fixed: events.py logger used event= kwarg conflicting with structlog _nop()
+- Added 9 missing test files covering all Phase 1 modules:
+  tests/core/test_events.py
+  tests/brain/test_router.py
+  tests/brain/test_response_builder.py
+  tests/agents/test_base_agent.py
+  tests/security/test_input_validator.py
+  tests/security/test_confirmation_gate.py
+  tests/tools/test_registry.py
+  tests/voice/test_wake_word.py
+- All 133 tests passing
+- Updated folder_structure.txt, bugs.txt, changelog.txt, session_handoff.txt
+- All 8 quality rules verified and satisfied

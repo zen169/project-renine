@@ -54,7 +54,7 @@ class EventBus:
         self._subscribers[event_name].append(handler)
         logger.debug(
             "event_subscribed",
-            event=event_name,
+            ev=event_name,
             handler=handler.__qualname__,
         )
 
@@ -70,7 +70,7 @@ class EventBus:
             handlers.remove(handler)
             logger.debug(
                 "event_unsubscribed",
-                event=event_name,
+                ev=event_name,
                 handler=handler.__qualname__,
             )
 
@@ -94,7 +94,7 @@ class EventBus:
 
         logger.debug(
             "event_published",
-            event=event_name,
+            ev=event_name,
             handler_count=len(handlers),
         )
 
@@ -104,7 +104,7 @@ class EventBus:
             except Exception:
                 logger.exception(
                     "event_handler_error",
-                    event=event_name,
+                    ev=event_name,
                     handler=handler.__qualname__,
                 )
 

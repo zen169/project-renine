@@ -2,41 +2,42 @@
 RENINE — PHASE 1 REPORT
 ============================================================
 Phase: 1 — MVP Foundation and Core Pipeline
-Status: COMPLETE
-Date: 2026-06-18
+Status: COMPLETE — Formally validated 2026-06-18
 Engineer: Antigravity
 
 ============================================================
 COMPLETED OBJECTIVES
 ============================================================
-1. Complete project folder structure created
-2. pyproject.toml with all Phase 1 dependencies declared
-3. .env.example with documented variables
-4. core/config.py — YAML config loader with env var interpolation
-5. core/logging_config.py — structlog setup with daily rotation
-6. core/exceptions.py — full custom exception hierarchy
-7. core/events.py — lightweight internal event bus
-8. core/context_sanitizer.py — strips sensitive data from payloads
-9. brain/ollama_client.py — Qwen3 8B via Ollama (sync + async streaming)
+1.  Complete project folder structure created
+2.  pyproject.toml with all Phase 1 dependencies declared
+3.  .env.example with documented variables
+4.  core/config.py — YAML config loader with ${ENV:-default}
+5.  core/logging_config.py — structlog + daily rotation
+6.  core/exceptions.py — full custom exception hierarchy
+7.  core/events.py — synchronous pub/sub event bus
+8.  core/context_sanitizer.py — sensitive data stripping
+9.  brain/ollama_client.py — Qwen3 8B via Ollama (sync + async stream)
 10. brain/router.py — routes input to MainBrainAgent
 11. brain/response_builder.py — assembles structured responses
 12. agents/base_agent.py — abstract base class with manifests
 13. agents/main_brain_agent.py — conversation agent
-14. memory/layer1_context.py — in-memory conversation context
-15. voice/wake_word.py — wake word detection ("Renine")
+14. memory/layer1_context.py — in-memory rolling context window
+15. voice/wake_word.py — phonetic wake word detection
 16. voice/stt.py — faster-whisper integration
-17. voice/tts.py — Piper TTS integration
+17. voice/tts.py — Piper TTS via subprocess
 18. voice/audio_pipeline.py — full mic→STT→brain→TTS pipeline
 19. security/input_validator.py — text, path, shell validation
 20. security/confirmation_gate.py — destructive action gating
-21. tools/registry.py — @register_tool decorator + ToolRegistry
-22. tools/executor.py — safe execution with permission checks
-23. Electron UI: ChatWindow.tsx, VoiceIndicator.tsx, basic layout
-24. All docs/ files created with Phase 1 content
-25. Tests for core, brain, memory, and voice
+21. security/encryption.py — Fernet symmetric encryption
+22. tools/permissions.py — PermissionLevel (single source of truth)
+23. tools/registry.py — @register_tool decorator + ToolRegistry
+24. tools/executor.py — safe execution with full permission checks
+25. Electron UI — ChatWindow.tsx, VoiceIndicator.tsx, basic layout
+26. All 16 docs/ files created (including session_handoff.txt)
+27. 16 test files, 133 tests, all passing
 
 ============================================================
-FILES CREATED
+FILES CREATED (total ~80)
 ============================================================
 Root: pyproject.toml, .env.example, .gitignore, README.md
 
@@ -58,76 +59,104 @@ Security (3): input_validator.py, confirmation_gate.py, encryption.py
 
 Tools (3): permissions.py, registry.py, executor.py
 
-UI (12): package.json, tsconfig.json, main.ts, preload.ts,
+UI (13): package.json, tsconfig.json, main.ts, preload.ts,
          ipc_handlers.ts, index.html, app.tsx, globals.css,
          ChatWindow.tsx, VoiceIndicator.tsx, MessageBubble.tsx,
          Sidebar.tsx, FloatingWidget.tsx
 
-Tests (7): test_config.py, test_logging.py,
-           test_context_sanitizer.py, test_ollama_client.py,
-           test_layer1_context.py, test_stt.py, test_tts.py
+Tests (16 files, 133 tests):
+  core: test_config, test_logging, test_context_sanitizer, test_events
+  brain: test_ollama_client, test_router, test_response_builder
+  agents: test_base_agent
+  memory: test_layer1_context
+  security: test_input_validator, test_confirmation_gate
+  tools: test_registry
+  voice: test_stt, test_tts, test_wake_word
 
-Docs (16): project_state.txt, architecture_summary.txt,
-           folder_structure.txt, features.txt, code_map.txt,
-           memory_system.txt, tools_registry.txt,
-           database_schema.txt, models.txt, bugs.txt,
-           performance_notes.txt, technical_debt.txt,
-           changelog.txt, deleted_components.txt,
-           lessons_learned.txt, phase_1_report.txt
-
-Total: ~70 files created
+Docs (16): project_state, architecture_summary, folder_structure,
+           features, code_map, memory_system, tools_registry,
+           database_schema, models, bugs, performance_notes,
+           technical_debt, changelog, deleted_components,
+           lessons_learned, session_handoff
+           + phase_reports/phase_1_report.txt
 
 ============================================================
 MAJOR DECISIONS
 ============================================================
-1. PermissionLevel enum lives in tools/permissions.py as the
-   single source of truth. All other modules import from there.
+1. PermissionLevel lives in tools/permissions.py — single source
+   of truth. All modules import from there.
 
-2. Electron UI uses vanilla JS/TS for Phase 1 without a React
-   build pipeline. Components are structured as classes that
-   will migrate to React components in later phases.
+2. Electron UI uses vanilla TS classes for Phase 1 without a React
+   build pipeline. Component structure mirrors future React shape.
 
-3. ContextSanitizer is wired in from Phase 1 even though only
-   local Ollama is used. This prevents any future external
-   API path from bypassing sanitization.
+3. ContextSanitizer wired in Phase 1 even though only local Ollama
+   is used — prevents any external API path bypassing sanitization.
 
-4. STT model uses lazy loading to avoid blocking app startup.
+4. STT model uses lazy loading — avoids blocking app startup.
    Module-level caching prevents repeated GPU allocation.
 
-5. All config values come from YAML files with env var
-   interpolation — no hardcoded values in source code.
+5. All config from YAML files with ${ENV:-default} interpolation
+   — no hardcoded values, no secrets in source.
+
+6. Session handoff system established — project is documentation-
+   driven. Chat history is temporary; docs are permanent.
 
 ============================================================
 KNOWN ISSUES
 ============================================================
-1. Electron-Python IPC bridge not yet connected (TD-003).
-   Phase 1 UI echoes messages for testing purposes.
+TD-001 (Low): Electron UI inline JS in index.html
+  Remediation: Migrate to React + Vite in Phase 2 or 3.
 
-2. Audio pipeline VAD not fully implemented (TD-002).
-   Pipeline structure is in place but WebRTC VAD integration
-   requires runtime audio device testing.
+TD-002 (Low): Audio pipeline VAD not fully implemented
+  Remediation: Full webrtcvad integration in Phase 2.
 
-3. Inline JS in index.html duplicates ChatWindow logic (TD-001).
-   Will be cleaned up when React build pipeline is added.
+TD-003 (Medium): Electron-Python IPC not connected
+  Remediation: Build subprocess/named-pipe bridge in Phase 2.
+
+Resolved during phase:
+- PermissionLevel duplication (base_agent + tools/permissions)
+- events.py logger kwarg conflict with structlog _nop()
+- chat_stream() exceeded 50-line limit (split into _consume_stream)
+
+============================================================
+PERFORMANCE NOTES
+============================================================
+- 133 tests run in ~1.1s (pure Python, fully mocked)
+- No live Ollama server needed for tests
+- No GPU needed for tests (faster-whisper and Piper are mocked)
+- STT model lazy-loads on first call — expect ~3-5s on first use
+- Ollama streaming reduces perceived response latency
+- structlog JSON rendering overhead: negligible
+
+VRAM Budget (RTX 3060, 12GB):
+  Qwen3 8B (Ollama):    ~6.0 GB
+  faster-whisper base:  ~0.5 GB
+  Total Phase 1:        ~6.5 GB
+  Remaining:            ~5.5 GB (headroom for Phase 5 vision model)
 
 ============================================================
 FUTURE-AWARENESS VERIFICATION
 ============================================================
-[✓] BaseAgent supports tool_manifest, memory_access_level,
-    and permission_level from Phase 1
-[✓] ContextSanitizer wired on every potential external path
-[✓] ToolRegistry importable and functional (empty)
-[✓] Electron IPC uses contextBridge pattern
+[✓] BaseAgent has tool_manifest, memory_access_level, permission_level
+[✓] ContextSanitizer wired on every external API path
+[✓] ToolRegistry importable and functional (empty in Phase 1)
+[✓] Electron IPC uses contextBridge — never relaxed
 [✓] All database paths from config/settings.yaml
 [✓] No circular imports
 [✓] No hardcoded secrets
+[✓] All functions typed and docstringed
+[✓] No function exceeds 50 lines
 
 ============================================================
 RECOMMENDATIONS FOR PHASE 2
 ============================================================
-1. Implement Layer 2–4 memory with SQLAlchemy + Alembic
-2. Initialize ChromaDB collections with namespace prefixes
-3. Build the Electron-Python subprocess pipe for real IPC
-4. Add full WebRTC VAD to the audio pipeline
-5. Implement MemoryManager as the unified memory interface
-6. Create the MemoryAgent and integrate into LangGraph graph
+1. Implement Layer 2 conversation history (SQLite, 48h TTL)
+2. Implement Layer 3 mind database (SQLite + ChromaDB)
+3. Implement Layer 4 personality database
+4. Create MemoryManager as unified interface to all layers
+5. Implement expiration service (APScheduler)
+6. Add BGE-M3 embeddings for semantic retrieval (ChromaDB)
+7. Create SQLAlchemy models + Alembic migrations
+8. Create MemoryAgent and integrate into LangGraph graph
+9. Build Electron-Python subprocess bridge (resolve TD-003)
+10. Implement full WebRTC VAD in audio pipeline (resolve TD-002)

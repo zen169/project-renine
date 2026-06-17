@@ -129,36 +129,44 @@ async def chat_stream(
     """
     config = _get_ollama_config()
     target_model = model or config.get("model", "qwen3:8b")
-
     full_messages = _prepend_system_prompt(messages, system_prompt)
 
     try:
         client = _build_async_client()
-        stream = await client.chat(
-            model=target_model,
-            messages=full_messages,
-            stream=True,
+        raw_stream = await client.chat(
+            model=target_model, messages=full_messages, stream=True
         )
-
-        total_length = 0
-        async for chunk in stream:
-            content = chunk.get("message", {}).get("content", "")
-            if content:
-                total_length += len(content)
-                yield content
-
-        logger.info(
-            "ollama_stream_complete",
-            model=target_model,
-            total_length=total_length,
-        )
-
+        async for chunk in _consume_stream(raw_stream, target_model):
+            yield chunk
     except ollama.ResponseError as e:
         logger.error("ollama_model_error", model=target_model, error=str(e))
         raise OllamaModelError(str(e)) from e
+    except (OllamaModelError, OllamaConnectionError):
+        raise
     except Exception as e:
         logger.error("ollama_connection_error", error=str(e))
         raise OllamaConnectionError(str(e)) from e
+
+
+async def _consume_stream(
+    stream: Any, model: str
+) -> AsyncGenerator[str, None]:
+    """Consume an Ollama stream and yield text chunks.
+
+    Args:
+        stream: Async iterable of Ollama chunk objects.
+        model: Model name for logging.
+
+    Yields:
+        Non-empty string chunks from the stream.
+    """
+    total_length = 0
+    async for chunk in stream:
+        content = chunk.get("message", {}).get("content", "")
+        if content:
+            total_length += len(content)
+            yield content
+    logger.info("ollama_stream_complete", model=model, total_length=total_length)
 
 
 def _prepend_system_prompt(

@@ -32,3 +32,16 @@ RESOLVED DEBT
 [2026-06-18] PermissionLevel duplication resolved.
   Was: Two independent PermissionLevel enums.
   Fix: Single source of truth in tools/permissions.py.
+
+[2026-06-18] chat_stream() exceeded 50-line function limit.
+  Was: 53-line async generator with inline streaming loop.
+  Fix: Extracted _consume_stream() helper; both functions now
+    under 50 lines. No behaviour change.
+  Files: renine/brain/ollama_client.py
+
+[2026-06-18] events.py logger kwarg conflicted with structlog _nop().
+  Was: logger.debug(event=event_name) caused TypeError because
+    structlog's no-op logger treats 'event' as a positional arg.
+  Fix: Renamed to ev=event_name in all logger calls in events.py.
+  Files: renine/core/events.py
+

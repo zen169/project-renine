@@ -16,3 +16,12 @@ RESOLVED BUGS
     tools/permissions.py and agents/base_agent.py.
   Resolution: base_agent.py now imports from tools/permissions.py.
   Files Changed: renine/agents/base_agent.py
+
+[2026-06-18] events.py structlog kwarg conflict
+  Description: logger.debug() calls used event= as a keyword argument,
+    which conflicts with structlog's internal _nop() positional parameter
+    'event', causing TypeError on all EventBus.subscribe() calls.
+  Resolution: Renamed event= to ev= in all logger calls in events.py.
+  Files Changed: renine/core/events.py
+  Detected By: test_events.py during quality verification pass.
+

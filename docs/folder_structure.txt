@@ -99,6 +99,7 @@ Renine/
 │   └── .gitkeep
 │
 ├── docs/
+│   ├── session_handoff.txt
 │   ├── project_state.txt
 │   ├── architecture_summary.txt
 │   ├── folder_structure.txt
@@ -127,20 +128,28 @@ Renine/
     │   ├── __init__.py
     │   ├── test_config.py
     │   ├── test_logging.py
-    │   └── test_context_sanitizer.py
+    │   ├── test_context_sanitizer.py
+    │   └── test_events.py
     ├── brain/
     │   ├── __init__.py
-    │   └── test_ollama_client.py
+    │   ├── test_ollama_client.py
+    │   ├── test_router.py
+    │   └── test_response_builder.py
     ├── agents/
-    │   └── __init__.py
+    │   ├── __init__.py
+    │   └── test_base_agent.py
     ├── memory/
     │   ├── __init__.py
     │   └── test_layer1_context.py
     ├── tools/
-    │   └── __init__.py
+    │   ├── __init__.py
+    │   └── test_registry.py
     ├── voice/
     │   ├── __init__.py
     │   ├── test_stt.py
-    │   └── test_tts.py
+    │   ├── test_tts.py
+    │   └── test_wake_word.py
     └── security/
-        └── __init__.py
+        ├── __init__.py
+        ├── test_input_validator.py
+        └── test_confirmation_gate.py
