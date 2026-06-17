@@ -1,0 +1,18 @@
+============================================================
+RENINE — BUG TRACKER
+============================================================
+Last Updated: 2026-06-18
+
+============================================================
+OPEN BUGS
+============================================================
+(none)
+
+============================================================
+RESOLVED BUGS
+============================================================
+[2026-06-18] PermissionLevel duplication
+  Description: PermissionLevel was defined independently in both
+    tools/permissions.py and agents/base_agent.py.
+  Resolution: base_agent.py now imports from tools/permissions.py.
+  Files Changed: renine/agents/base_agent.py

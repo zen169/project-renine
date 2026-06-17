@@ -1,0 +1,53 @@
+============================================================
+RENINE — FEATURES TRACKER
+============================================================
+Last Updated: 2026-06-18
+
+============================================================
+PHASE 1 — IMPLEMENTED
+============================================================
+[x] YAML config loader with env var interpolation
+[x] Centralized structlog logging with daily rotation
+[x] Custom exception hierarchy
+[x] Internal event bus (pub/sub)
+[x] Context sanitizer for external API payloads
+[x] Ollama client (sync + async streaming)
+[x] Input router (default → MainBrainAgent)
+[x] Response builder (text, error, confirmation, tool result)
+[x] Base agent abstract class with manifests
+[x] Main brain agent (conversation via Qwen3 8B)
+[x] Layer 1 in-memory conversation context
+[x] Wake word detection ("Renine")
+[x] STT via faster-whisper
+[x] TTS via Piper
+[x] Audio pipeline (mic→STT→brain→TTS)
+[x] Input validator (text, path, shell)
+[x] Confirmation gate for destructive actions
+[x] Fernet encryption for sensitive fields
+[x] Tool registry with @register_tool decorator
+[x] Tool executor with permission checks
+[x] Permission level enum
+[x] Electron UI shell (chat window, voice indicator)
+
+============================================================
+PHASE 2 — PLANNED
+============================================================
+[ ] Layer 2 conversation history (SQLite, 48h TTL)
+[ ] Layer 3 mind database (SQLite + ChromaDB)
+[ ] Layer 4 personality database
+[ ] Memory manager unified interface
+[ ] Expiration service (APScheduler)
+[ ] Semantic retrieval (BGE-M3 + ChromaDB)
+[ ] SQLAlchemy models + Alembic migrations
+[ ] Memory agent (LangGraph integration)
+
+============================================================
+PHASE 3–9 — PLANNED
+============================================================
+[ ] Personal databases (inventory, pets, house)
+[ ] Desktop control and file agents
+[ ] Vision (OCR, screenshots, webcam)
+[ ] Browser, email, and news agents
+[ ] Smart home integration
+[ ] Mobile companion
+[ ] Level 5 continuous learning

@@ -1,0 +1,110 @@
+============================================================
+RENINE — CODE MAP
+============================================================
+Last Updated: 2026-06-18
+
+Each entry: file path → purpose → key classes/functions
+
+============================================================
+CORE
+============================================================
+renine/core/config.py
+  → YAML config loader with ${ENV:-default} interpolation
+  → load_yaml(), get_settings(), get_project_root()
+
+renine/core/logging_config.py
+  → Centralized structlog setup with file rotation
+  → configure_logging(), get_logger()
+
+renine/core/exceptions.py
+  → Complete exception hierarchy
+  → RenineError (base), BrainError, ToolError, VoiceError, etc.
+
+renine/core/events.py
+  → Synchronous pub/sub event bus
+  → EventBus class, event_bus singleton
+
+renine/core/context_sanitizer.py
+  → Strips sensitive data before external API calls
+  → sanitize(), check_namespace()
+
+============================================================
+BRAIN
+============================================================
+renine/brain/ollama_client.py
+  → Qwen3 8B interface via Ollama
+  → chat(), chat_stream(), check_connection()
+
+renine/brain/router.py
+  → Routes user input to appropriate agent
+  → route() → RouteDecision, RouteTarget enum
+
+renine/brain/response_builder.py
+  → Assembles structured response objects
+  → build_text_response(), build_error_response(), RenineResponse
+
+============================================================
+AGENTS
+============================================================
+renine/agents/base_agent.py
+  → Abstract base for all agents
+  → BaseAgent (ABC), AgentManifest, MemoryAccessLevel
+
+renine/agents/main_brain_agent.py
+  → Primary conversation agent
+  → MainBrainAgent.process()
+
+============================================================
+MEMORY
+============================================================
+renine/memory/layer1_context.py
+  → In-memory conversation context (rolling window)
+  → ConversationContext, Message
+
+============================================================
+VOICE
+============================================================
+renine/voice/wake_word.py
+  → Wake word detection with phonetic variants
+  → check_wake_word(), extract_command_after_wake_word()
+
+renine/voice/stt.py
+  → faster-whisper STT interface
+  → transcribe_audio(), transcribe_file(), unload_model()
+
+renine/voice/tts.py
+  → Piper TTS interface
+  → synthesize(), synthesize_to_file()
+
+renine/voice/audio_pipeline.py
+  → Full voice interaction loop
+  → AudioPipeline class, AudioPipelineState
+
+============================================================
+SECURITY
+============================================================
+renine/security/input_validator.py
+  → Input sanitization and validation
+  → validate_text_input(), validate_path(), validate_shell_input()
+
+renine/security/confirmation_gate.py
+  → Confirmation prompts for destructive actions
+  → request_confirmation(), requires_confirmation()
+
+renine/security/encryption.py
+  → Fernet symmetric encryption
+  → encrypt(), decrypt(), generate_key()
+
+============================================================
+TOOLS
+============================================================
+renine/tools/permissions.py
+  → PermissionLevel enum (single source of truth)
+
+renine/tools/registry.py
+  → Tool registration and discovery
+  → @register_tool decorator, ToolRegistry, BaseTool, ToolResult
+
+renine/tools/executor.py
+  → Safe tool execution pipeline
+  → execute_tool()

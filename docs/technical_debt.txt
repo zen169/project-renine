@@ -1,0 +1,34 @@
+============================================================
+RENINE — TECHNICAL DEBT
+============================================================
+Last Updated: 2026-06-18
+
+============================================================
+ACTIVE DEBT
+============================================================
+[TD-001] Electron UI uses vanilla JS inline in index.html
+  Severity: Low
+  Reason: Phase 1 ships a functional UI shell without requiring
+    a full React/TypeScript build pipeline.
+  Remediation: Migrate to proper React component tree with
+    bundling (Vite or Webpack) in Phase 2 or 3.
+
+[TD-002] Audio pipeline VAD not fully implemented
+  Severity: Low
+  Reason: WebRTC VAD integration requires runtime audio device
+    testing. Phase 1 establishes the pipeline structure.
+  Remediation: Implement full VAD with webrtcvad in Phase 2.
+
+[TD-003] Electron-Python IPC not connected
+  Severity: Medium
+  Reason: Phase 1 UI echoes messages. The subprocess pipe or
+    named pipe bridge to the Python backend is not yet built.
+  Remediation: Implement in Phase 2 when the full pipeline is
+    tested end-to-end.
+
+============================================================
+RESOLVED DEBT
+============================================================
+[2026-06-18] PermissionLevel duplication resolved.
+  Was: Two independent PermissionLevel enums.
+  Fix: Single source of truth in tools/permissions.py.

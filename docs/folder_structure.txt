@@ -1,0 +1,146 @@
+============================================================
+RENINE — FOLDER STRUCTURE
+============================================================
+Last Updated: 2026-06-18
+
+Renine/
+├── pyproject.toml
+├── .env.example
+├── .gitignore
+├── README.md
+│
+├── renine/
+│   ├── __init__.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── logging_config.py
+│   │   ├── exceptions.py
+│   │   ├── events.py
+│   │   └── context_sanitizer.py
+│   ├── brain/
+│   │   ├── __init__.py
+│   │   ├── ollama_client.py
+│   │   ├── router.py
+│   │   └── response_builder.py
+│   ├── agents/
+│   │   ├── __init__.py
+│   │   ├── base_agent.py
+│   │   └── main_brain_agent.py
+│   ├── memory/
+│   │   ├── __init__.py
+│   │   └── layer1_context.py
+│   ├── databases/
+│   │   ├── __init__.py
+│   │   ├── models/
+│   │   │   └── __init__.py
+│   │   └── migrations/
+│   │       └── .gitkeep
+│   ├── tools/
+│   │   ├── __init__.py
+│   │   ├── permissions.py
+│   │   ├── registry.py
+│   │   ├── executor.py
+│   │   ├── system/
+│   │   │   └── __init__.py
+│   │   ├── files/
+│   │   │   └── __init__.py
+│   │   ├── scheduling/
+│   │   │   └── __init__.py
+│   │   └── web/
+│   │       └── __init__.py
+│   ├── voice/
+│   │   ├── __init__.py
+│   │   ├── wake_word.py
+│   │   ├── stt.py
+│   │   ├── tts.py
+│   │   └── audio_pipeline.py
+│   ├── vision/
+│   │   └── __init__.py
+│   ├── security/
+│   │   ├── __init__.py
+│   │   ├── encryption.py
+│   │   ├── input_validator.py
+│   │   └── confirmation_gate.py
+│   └── ui/
+│       ├── package.json
+│       ├── tsconfig.json
+│       ├── electron/
+│       │   ├── main.ts
+│       │   ├── preload.ts
+│       │   └── ipc_handlers.ts
+│       └── renderer/
+│           ├── index.html
+│           ├── app.tsx
+│           ├── components/
+│           │   ├── ChatWindow.tsx
+│           │   ├── MessageBubble.tsx
+│           │   ├── VoiceIndicator.tsx
+│           │   ├── Sidebar.tsx
+│           │   └── FloatingWidget.tsx
+│           └── styles/
+│               └── globals.css
+│
+├── config/
+│   ├── settings.yaml
+│   ├── logging.yaml
+│   ├── tools.yaml
+│   ├── memory.yaml
+│   └── security.yaml
+│
+├── models/
+│   ├── .gitkeep
+│   └── README.md
+│
+├── data/
+│   └── .gitkeep
+│
+├── logs/
+│   └── .gitkeep
+│
+├── docs/
+│   ├── project_state.txt
+│   ├── architecture_summary.txt
+│   ├── folder_structure.txt
+│   ├── features.txt
+│   ├── code_map.txt
+│   ├── memory_system.txt
+│   ├── tools_registry.txt
+│   ├── database_schema.txt
+│   ├── models.txt
+│   ├── bugs.txt
+│   ├── performance_notes.txt
+│   ├── technical_debt.txt
+│   ├── changelog.txt
+│   ├── deleted_components.txt
+│   ├── lessons_learned.txt
+│   ├── memory/
+│   │   ├── RENINE_MASTER_PROMPT_V1_0.md
+│   │   └── PROJECT PLAN V1.0.md
+│   └── phase_reports/
+│       └── phase_1_report.txt
+│
+└── tests/
+    ├── __init__.py
+    ├── conftest.py
+    ├── core/
+    │   ├── __init__.py
+    │   ├── test_config.py
+    │   ├── test_logging.py
+    │   └── test_context_sanitizer.py
+    ├── brain/
+    │   ├── __init__.py
+    │   └── test_ollama_client.py
+    ├── agents/
+    │   └── __init__.py
+    ├── memory/
+    │   ├── __init__.py
+    │   └── test_layer1_context.py
+    ├── tools/
+    │   └── __init__.py
+    ├── voice/
+    │   ├── __init__.py
+    │   ├── test_stt.py
+    │   └── test_tts.py
+    └── security/
+        └── __init__.py

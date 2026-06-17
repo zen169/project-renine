@@ -1,0 +1,38 @@
+============================================================
+RENINE — TOOLS REGISTRY
+============================================================
+Last Updated: 2026-06-18
+
+============================================================
+REGISTRY STATUS
+============================================================
+The tool registry is functional but empty in Phase 1.
+All tools are disabled in config/tools.yaml.
+
+============================================================
+ARCHITECTURE
+============================================================
+Registry: renine/tools/registry.py — @register_tool decorator
+Executor: renine/tools/executor.py — permission + safety pipeline
+Permissions: renine/tools/permissions.py — PermissionLevel enum
+
+============================================================
+PERMISSION LEVELS
+============================================================
+READ_ONLY (0)   — Safe reads, no side effects
+STANDARD (1)    — Normal actions, reversible
+ELEVATED (2)    — Requires user confirmation
+DESTRUCTIVE (3) — Hard confirmation + audit log
+
+============================================================
+REGISTERED TOOLS
+============================================================
+(none — tools will be registered starting Phase 3)
+
+============================================================
+PLANNED TOOLS (future phases)
+============================================================
+Phase 3: alarm, reminder, timer
+Phase 4: app_launcher, volume_control, clipboard,
+         file_reader, file_search, pdf_reader
+Phase 6: browser

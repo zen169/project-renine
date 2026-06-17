@@ -1,0 +1,37 @@
+============================================================
+RENINE — MEMORY SYSTEM
+============================================================
+Last Updated: 2026-06-18
+
+============================================================
+OVERVIEW
+============================================================
+Four-layer memory architecture:
+  Layer 1: Current conversation context (in-memory, Phase 1)
+  Layer 2: Conversation history (SQLite, 48h TTL, Phase 2)
+  Layer 3: Mind database (SQLite + ChromaDB, Phase 2)
+  Layer 4: Personality database (SQLite + ChromaDB, Phase 2)
+
+============================================================
+LAYER 1 — IMPLEMENTED (Phase 1)
+============================================================
+File: renine/memory/layer1_context.py
+Storage: In-process Python list
+Lifetime: Duration of a single conversation session
+Format: List of Message objects (role, content, timestamp)
+Max Size: 50 messages (configurable via settings.yaml)
+Overflow: Oldest messages trimmed with system summary note
+Security: Never serialized to disk. Never sent externally.
+
+============================================================
+LAYERS 2–4 — PLANNED (Phase 2)
+============================================================
+Configured in config/memory.yaml but not yet implemented.
+MemoryManager interface defined in architecture but not created.
+
+============================================================
+SECURITY RULES
+============================================================
+- Layer 3 and Layer 4 are classified LOCAL ONLY
+- All data must pass through ContextSanitizer before any external call
+- ContextSanitizer STRIPS (not summarizes) local-only namespace data

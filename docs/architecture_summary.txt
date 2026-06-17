@@ -1,0 +1,76 @@
+============================================================
+RENINE — ARCHITECTURE SUMMARY
+============================================================
+Last Updated: 2026-06-18
+
+============================================================
+SYSTEM OVERVIEW
+============================================================
+Renine is a local-first AI butler running on Windows 11.
+All intelligence lives in the Python backend. The Electron
+frontend is a thin UI shell.
+
+Pipeline: Human → Wake Word → STT → Router → Brain → TTS
+
+============================================================
+MODULE ARCHITECTURE (Phase 1)
+============================================================
+
+renine/core/
+  config.py         — YAML config loader with ${ENV:-default}
+  logging_config.py — structlog with daily file rotation
+  exceptions.py     — Full exception hierarchy (RenineError base)
+  events.py         — Synchronous pub/sub event bus
+  context_sanitizer.py — Strips sensitive data for external APIs
+
+renine/brain/
+  ollama_client.py  — Sync + async streaming to Qwen3 8B
+  router.py         — Routes input to agents (Phase 1: all → MainBrain)
+  response_builder.py — Assembles structured RenineResponse objects
+
+renine/agents/
+  base_agent.py     — ABC with manifest, memory access, permissions
+  main_brain_agent.py — Conversation via Ollama (supervisor node)
+
+renine/memory/
+  layer1_context.py — In-memory rolling context window (max 50 msgs)
+
+renine/voice/
+  wake_word.py      — Keyword detection with phonetic variants
+  stt.py            — faster-whisper interface (lazy model loading)
+  tts.py            — Piper TTS via subprocess (shell=False)
+  audio_pipeline.py — Full mic→STT→brain→TTS state machine
+
+renine/security/
+  input_validator.py  — Text, path, shell input validation
+  confirmation_gate.py — Destructive action gating
+  encryption.py       — Fernet symmetric encryption
+
+renine/tools/
+  permissions.py — PermissionLevel enum (single source of truth)
+  registry.py    — @register_tool decorator + ToolRegistry
+  executor.py    — Safe execution with permission checks
+
+renine/ui/ (Electron)
+  electron/main.ts     — Window creation, security hardening
+  electron/preload.ts  — contextBridge with channel whitelisting
+  electron/ipc_handlers.ts — IPC message routing
+  renderer/index.html  — Main HTML with CSP
+  renderer/app.tsx     — Root UI orchestrator
+  renderer/components/ — ChatWindow, VoiceIndicator, placeholders
+
+============================================================
+COMMUNICATION PATTERNS
+============================================================
+- Modules communicate via function calls and event bus
+- Agents communicate via LangGraph state (Phase 2+)
+- UI communicates via Electron IPC (contextBridge)
+- No HTTP server in Phase 1
+
+============================================================
+INTERFACE CONTRACTS (STABLE APIs)
+============================================================
+- MemoryManager API: store(), retrieve(), summarize_and_store_conversation()
+- ToolRegistry API: register(), get_tool(), list_tools()
+- BaseAgent API: get_manifest(), process()
+- ContextSanitizer API: sanitize(), check_namespace()

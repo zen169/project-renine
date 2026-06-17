@@ -1,0 +1,29 @@
+============================================================
+RENINE — LESSONS LEARNED
+============================================================
+Last Updated: 2026-06-18
+
+============================================================
+PHASE 1 LESSONS
+============================================================
+[L-001] Define shared enums in one place from the start
+  Context: PermissionLevel was defined in both tools/permissions.py
+    and agents/base_agent.py, creating a duplication risk.
+  Lesson: All shared types should have a single source of truth.
+    Import from the canonical location everywhere.
+
+[L-002] Wire security infrastructure early, even if unused
+  Context: ContextSanitizer was implemented in Phase 1 even though
+    only local Ollama is used. This ensures no external call path
+    can ever be added without sanitization.
+  Lesson: Security-by-default is cheaper than security-by-retrofit.
+
+[L-003] Config from YAML, not hardcoded values
+  Context: All database paths, model configs, and feature flags
+    live in config/*.yaml with env var interpolation.
+  Lesson: This makes the system configurable without code changes
+    and prevents secrets from leaking into source code.
+
+[L-004] Lazy model loading saves startup time
+  Context: faster-whisper model is loaded on first use, not at import.
+  Lesson: For GPU-heavy models, lazy loading avoids blocking app startup.

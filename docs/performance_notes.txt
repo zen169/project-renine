@@ -1,0 +1,20 @@
+============================================================
+RENINE — PERFORMANCE NOTES
+============================================================
+Last Updated: 2026-06-18
+
+============================================================
+PHASE 1 OBSERVATIONS
+============================================================
+- No performance bottlenecks observed in Phase 1 (no runtime testing yet).
+- faster-whisper lazy-loads the model on first use. First transcription
+  will be slow (~3-5s) while the model loads to GPU.
+- Ollama client uses streaming by default to reduce perceived latency.
+- structlog JSON rendering has negligible overhead.
+
+============================================================
+VRAM AWARENESS
+============================================================
+- STT model is cached at module level to avoid repeated GPU loading.
+- unload_model() is available to free VRAM when STT is not needed.
+- Phase 5 will require careful VRAM budgeting when adding vision model.

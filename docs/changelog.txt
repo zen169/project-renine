@@ -1,0 +1,27 @@
+============================================================
+RENINE — CHANGELOG
+============================================================
+
+============================================================
+2026-06-18 — Phase 1 Complete
+============================================================
+- Created complete project folder structure
+- Created pyproject.toml with all Phase 1 dependencies
+- Created .env.example with documented variables
+- Created README.md
+- Created all 5 config YAML files
+- Implemented renine/core/ (config, logging, exceptions, events, sanitizer)
+- Implemented renine/brain/ (ollama_client, router, response_builder)
+- Implemented renine/agents/ (base_agent, main_brain_agent)
+- Implemented renine/memory/layer1_context.py
+- Implemented renine/voice/ (wake_word, stt, tts, audio_pipeline)
+- Implemented renine/security/ (input_validator, confirmation_gate, encryption)
+- Implemented renine/tools/ (permissions, registry, executor)
+- Created Electron UI foundation (main.ts, preload.ts, ipc_handlers.ts)
+- Created renderer (index.html, app.tsx, globals.css)
+- Created ChatWindow.tsx and VoiceIndicator.tsx components
+- Created placeholder components (MessageBubble, Sidebar, FloatingWidget)
+- Created 7 test files (config, logging, sanitizer, ollama, layer1, stt, tts)
+- Created all 15 docs/*.txt files
+- Created docs/phase_reports/phase_1_report.txt
+- Fixed PermissionLevel duplication between base_agent and tools/permissions

@@ -1,0 +1,34 @@
+============================================================
+RENINE — DATABASE SCHEMA
+============================================================
+Last Updated: 2026-06-18
+
+============================================================
+STATUS
+============================================================
+No databases created in Phase 1. All database paths are
+configured in config/settings.yaml and config/memory.yaml.
+SQLAlchemy models and Alembic migrations will be created in Phase 2.
+
+============================================================
+PLANNED DATABASES (Phase 2)
+============================================================
+data/history.db    — Layer 2 conversation history
+data/mind.db       — Layer 3 structured memory
+data/personality.db — Layer 4 people profiles
+data/chroma/       — ChromaDB vector store
+
+============================================================
+PLANNED TABLES (Phase 2–3)
+============================================================
+history.db:
+  conversations(id, date, summary, raw_turns, created_at)
+
+mind.db:
+  inventory, pets, calendar_events, house, bills, tasks,
+  notes, file_index, daily_routines, shopping_lists
+
+personality.db:
+  people(id, name, relationship, age, birthday, food_preferences,
+         hobbies, personality_traits, goals, habits, notes,
+         created_at, updated_at)
