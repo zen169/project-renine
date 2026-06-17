@@ -1,0 +1,17 @@
+{
+  "name": "renine-ui",
+  "version": "0.1.0",
+  "description": "Renine AI Assistant — Desktop UI Shell",
+  "main": "electron/main.ts",
+  "scripts": {
+    "dev": "electron .",
+    "build": "tsc && electron ."
+  },
+  "dependencies": {
+    "electron": "^32.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^20.0.0"
+  }
+}

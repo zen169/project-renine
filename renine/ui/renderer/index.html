@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+    <title>Renine</title>
+    <link rel="stylesheet" href="styles/globals.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Chat Window -->
+        <div id="chat-container">
+            <header id="chat-header">
+                <div class="header-title">
+                    <span class="renine-name">Renine</span>
+                    <span class="status-dot" id="status-dot"></span>
+                    <span class="status-text" id="status-text">Online</span>
+                </div>
+            </header>
+
+            <main id="message-area">
+                <!-- Messages are injected here by ChatWindow logic -->
+                <div class="welcome-message">
+                    <p class="welcome-title">Hello! I'm Renine.</p>
+                    <p class="welcome-subtitle">Your personal AI assistant. How can I help you today?</p>
+                </div>
+            </main>
+
+            <footer id="input-area">
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        id="message-input" 
+                        placeholder="Type a message..." 
+                        autocomplete="off"
+                    >
+                    <button id="send-button" title="Send message">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13"></path>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                        </svg>
+                    </button>
+                    <button id="voice-button" title="Toggle voice input">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Voice Indicator -->
+                <div id="voice-indicator" class="hidden">
+                    <div class="voice-wave">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <span class="voice-label">Listening...</span>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // --- ChatWindow Logic ---
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const voiceButton = document.getElementById('voice-button');
+        const messageArea = document.getElementById('message-area');
+        const voiceIndicator = document.getElementById('voice-indicator');
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+
+        let voiceActive = false;
+
+        function addMessage(role, content) {
+            const bubble = document.createElement('div');
+            bubble.className = `message-bubble ${role}`;
+            bubble.textContent = content;
+            messageArea.appendChild(bubble);
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }
+
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) return;
+
+            addMessage('user', text);
+            messageInput.value = '';
+
+            // Remove welcome message on first send
+            const welcome = messageArea.querySelector('.welcome-message');
+            if (welcome) welcome.remove();
+
+            if (window.renineAPI) {
+                window.renineAPI.send('renine:send-message', { text });
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        voiceButton.addEventListener('click', () => {
+            voiceActive = !voiceActive;
+            voiceIndicator.classList.toggle('hidden', !voiceActive);
+            voiceButton.classList.toggle('active', voiceActive);
+
+            if (window.renineAPI) {
+                window.renineAPI.send('renine:voice-toggle', { enabled: voiceActive });
+            }
+        });
+
+        // --- Listen for responses from backend ---
+        if (window.renineAPI) {
+            window.renineAPI.on('renine:receive-response', (data) => {
+                addMessage('assistant', data.content);
+            });
+
+            window.renineAPI.on('renine:voice-state', (data) => {
+                const label = voiceIndicator.querySelector('.voice-label');
+                if (label) label.textContent = data.state === 'listening' ? 'Listening...' : 'Processing...';
+            });
+        }
+    </script>
+</body>
+</html>

@@ -20,6 +20,7 @@ from enum import IntEnum
 from typing import Any
 
 from renine.core.logging_config import get_logger
+from renine.tools.permissions import PermissionLevel
 
 logger = get_logger(__name__)
 
@@ -36,18 +37,6 @@ class MemoryAccessLevel(IntEnum):
     LAYER1_2_AND_3_READ = 3
     LAYER1_2_3_AND_4_READ = 4
     FULL_ACCESS = 5
-
-
-class PermissionLevel(IntEnum):
-    """Permission levels for agent operations.
-
-    Determines what kinds of actions an agent is authorized to perform.
-    """
-
-    READ_ONLY = 0
-    STANDARD = 1
-    ELEVATED = 2
-    DESTRUCTIVE = 3
 
 
 @dataclass
