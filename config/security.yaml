@@ -1,0 +1,80 @@
+# ============================================================
+# Renine — Security Policy Configuration
+# ============================================================
+
+security:
+  # --- Context Sanitizer ---
+  sanitizer:
+    # Fields that must ALWAYS be stripped before external API calls
+    sensitive_fields:
+      - password
+      - api_key
+      - token
+      - secret
+      - fernet_key
+      - credit_card
+      - ssn
+      - social_security
+      - bank_account
+      - address
+      - phone_number
+    
+    # Namespaces that are LOCAL ONLY — never sent externally
+    local_only_namespaces:
+      - mind
+      - personality
+      - inventory
+      - pets
+      - house
+      - bills
+      - calendar_events
+      - daily_routines
+      - shopping_lists
+
+  # --- File System ---
+  filesystem:
+    # Paths that are ALWAYS blocked from file operations
+    blocked_paths:
+      - "C:\\Windows"
+      - "C:\\Windows\\System32"
+      - "C:\\Program Files"
+      - "C:\\Program Files (x86)"
+      - "C:\\ProgramData"
+    
+    # Paths that are allowed (configured per user in Phase 4)
+    allowed_paths: []
+    
+    # Max file size for reading (bytes)
+    max_read_size_bytes: 52428800  # 50 MB
+
+  # --- Confirmation Gate ---
+  confirmation:
+    # Operations that always require confirmation
+    always_confirm:
+      - file_delete
+      - file_overwrite
+      - registry_edit
+      - system_shutdown
+      - app_install
+      - credential_access
+    
+    # Timeout for confirmation prompts (seconds)
+    timeout_seconds: 30
+
+  # --- Input Validation ---
+  input_validation:
+    max_input_length: 10000
+    max_path_depth: 15
+    blocked_shell_chars:
+      - "|"
+      - ";"
+      - "&"
+      - "`"
+      - "$("
+      - "&&"
+      - "||"
+
+  # --- Encryption ---
+  encryption:
+    algorithm: "fernet"
+    key_env_var: "FERNET_KEY"

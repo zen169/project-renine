@@ -1,0 +1,84 @@
+[project]
+name = "renine"
+version = "0.1.0"
+description = "Renine — A free, hybrid, local AI butler inspired by Friday from Iron Man."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+    { name = "Efren", email = "efren@renine.local" },
+]
+
+dependencies = [
+    # --- LLM & AI ---
+    "ollama>=0.4.0",
+    "langgraph>=0.2.0",
+    "langchain-core>=0.3.0",
+
+    # --- Speech ---
+    "faster-whisper>=1.0.0",
+    # piper-tts installed separately via pip/system (ONNX binary)
+
+    # --- Memory & Database ---
+    "chromadb>=0.5.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",
+    "sentence-transformers>=3.0.0",
+
+    # --- Scheduling ---
+    "apscheduler>=3.10.0",
+
+    # --- Security ---
+    "cryptography>=42.0.0",
+    "python-dotenv>=1.0.0",
+
+    # --- Logging ---
+    "structlog>=24.0.0",
+
+    # --- Config ---
+    "pyyaml>=6.0.0",
+
+    # --- Audio ---
+    "sounddevice>=0.4.0",
+    "numpy>=1.26.0",
+    "webrtcvad>=2.0.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.5.0",
+    "black>=24.0.0",
+    "mypy>=1.10.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["renine"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "TCH"]
+
+[tool.black]
+target-version = ["py311"]
+line-length = 100
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

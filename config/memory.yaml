@@ -1,0 +1,48 @@
+# ============================================================
+# Renine — Memory Layer Configuration
+# ============================================================
+
+memory:
+  # --- Layer 1: Current Conversation Context ---
+  layer1:
+    max_messages: 50
+    summary_threshold: 40  # Summarize oldest when reaching this count
+    storage: "in_memory"
+
+  # --- Layer 2: Conversation History ---
+  layer2:
+    ttl_hours: 48
+    cleanup_interval_minutes: 60
+    storage: "sqlite"
+    db_path: "data/history.db"
+
+  # --- Layer 3: Mind Database ---
+  layer3:
+    storage: "sqlite+chromadb"
+    sqlite_path: "data/mind.db"
+    chroma_dir: "data/chroma"
+    chroma_collection_prefix: "mind_"
+    namespaces:
+      - inventory
+      - pets
+      - calendar_events
+      - house
+      - bills
+      - tasks
+      - notes
+      - file_index
+      - daily_routines
+      - shopping_lists
+
+  # --- Layer 4: Personality Database ---
+  layer4:
+    storage: "sqlite+chromadb"
+    sqlite_path: "data/personality.db"
+    chroma_dir: "data/chroma"
+    chroma_collection: "personality"
+
+  # --- Embedding Model ---
+  embedding:
+    model_name: "BAAI/bge-m3"
+    device: "cuda"
+    batch_size: 32

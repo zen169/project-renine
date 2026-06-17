@@ -1,0 +1,30 @@
+# ============================================================
+# Renine — Logging Configuration
+# ============================================================
+
+logging:
+  level: "${LOG_LEVEL:-INFO}"
+  format: "json"
+  
+  # --- File Output ---
+  file:
+    enabled: true
+    directory: "logs"
+    filename_pattern: "renine_{date}.log"
+    rotation: "daily"
+    retention_days: 30
+    max_size_mb: 50
+  
+  # --- Console Output ---
+  console:
+    enabled: true
+    colors: true
+    level: "DEBUG"
+  
+  # --- Module-Specific Overrides ---
+  overrides:
+    renine.voice: "INFO"
+    renine.brain: "DEBUG"
+    renine.memory: "INFO"
+    renine.security: "WARNING"
+    renine.tools: "INFO"

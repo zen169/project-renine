@@ -1,0 +1,66 @@
+# ============================================================
+# Renine — Main Settings Configuration
+# ============================================================
+# All runtime configuration lives here. Never hardcode values
+# in source code.
+# ============================================================
+
+# --- Application ---
+app:
+  name: "Renine"
+  version: "0.1.0"
+  debug: false
+
+# --- Ollama ---
+ollama:
+  host: "${OLLAMA_HOST:-http://localhost:11434}"
+  model: "${OLLAMA_MODEL:-qwen3:8b}"
+  timeout_seconds: 120
+  max_retries: 3
+  streaming: true
+
+# --- Database Paths ---
+databases:
+  history_db: "data/history.db"
+  mind_db: "data/mind.db"
+  personality_db: "data/personality.db"
+  chroma_dir: "data/chroma"
+
+# --- Memory ---
+memory:
+  layer1_max_messages: 50
+  layer2_ttl_hours: 48
+
+# --- Voice ---
+voice:
+  wake_word: "renine"
+  stt:
+    model_size: "${WHISPER_MODEL_SIZE:-base.en}"
+    device: "${WHISPER_DEVICE:-cuda}"
+    compute_type: "${WHISPER_COMPUTE_TYPE:-float16}"
+  tts:
+    model_path: "${PIPER_MODEL_PATH:-models/piper/en_US-lessac-medium.onnx}"
+    config_path: "${PIPER_CONFIG_PATH:-models/piper/en_US-lessac-medium.onnx.json}"
+    speaker_id: 0
+    length_scale: 1.0
+
+# --- Audio ---
+audio:
+  sample_rate: 16000
+  channels: 1
+  frame_duration_ms: 30
+  vad_aggressiveness: 2
+  silence_threshold_ms: 800
+  max_recording_seconds: 30
+
+# --- Models Directory ---
+models:
+  base_dir: "models"
+
+# --- Feature Flags ---
+features:
+  voice_enabled: true
+  external_llm_fallback: false
+  vision_enabled: false
+  browser_agent_enabled: false
+  smart_home_enabled: false

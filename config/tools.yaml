@@ -1,0 +1,45 @@
+# ============================================================
+# Renine — Tool Permissions Configuration
+# ============================================================
+# Each tool can be enabled/disabled and assigned a permission level.
+# Permission levels: READ_ONLY (0), STANDARD (1), ELEVATED (2), DESTRUCTIVE (3)
+# ============================================================
+
+tools:
+  # --- System Tools (Phase 4) ---
+  app_launcher:
+    enabled: false
+    permission_level: 2  # ELEVATED — requires confirmation
+  volume_control:
+    enabled: false
+    permission_level: 1  # STANDARD
+  clipboard:
+    enabled: false
+    permission_level: 1  # STANDARD
+
+  # --- File Tools (Phase 4) ---
+  file_reader:
+    enabled: false
+    permission_level: 0  # READ_ONLY
+  file_search:
+    enabled: false
+    permission_level: 0  # READ_ONLY
+  pdf_reader:
+    enabled: false
+    permission_level: 0  # READ_ONLY
+
+  # --- Scheduling Tools (Phase 3) ---
+  alarm:
+    enabled: false
+    permission_level: 1  # STANDARD
+  reminder:
+    enabled: false
+    permission_level: 1  # STANDARD
+  timer:
+    enabled: false
+    permission_level: 1  # STANDARD
+
+  # --- Web Tools (Phase 6) ---
+  browser:
+    enabled: false
+    permission_level: 2  # ELEVATED
