@@ -4,22 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+          content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
     <title>Renine</title>
     <link rel="stylesheet" href="styles/globals.css">
 </head>
 <body>
     <div id="app">
-        <!-- Chat Window -->
-        <div id="chat-container">
-            <header id="chat-header">
-                <div class="header-title">
-                    <span class="renine-name">Renine</span>
-                    <span class="status-dot" id="status-dot"></span>
-                    <span class="status-text" id="status-text">Online</span>
-                </div>
-            </header>
+        <!-- Header -->
+        <header id="chat-header">
+            <div class="header-title">
+                <span class="renine-name">Renine</span>
+                <span class="status-dot" id="status-dot"></span>
+                <span class="status-text" id="status-text">Online</span>
+            </div>
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" id="tab-chat" onclick="switchTab('chat')">Chat</button>
+                <button class="nav-tab" id="tab-inventory" onclick="switchTab('inventory')">Inventory</button>
+                <button class="nav-tab" id="tab-pets" onclick="switchTab('pets')">Pets</button>
+                <button class="nav-tab" id="tab-people" onclick="switchTab('people')">Family & Friends</button>
+            </div>
+        </header>
 
+        <!-- Chat Container Panel -->
+        <div id="chat-container">
             <main id="message-area">
                 <!-- Messages are injected here by ChatWindow logic -->
                 <div class="welcome-message">
@@ -60,17 +68,359 @@
                 </div>
             </footer>
         </div>
+
+        <!-- Inventory Panel -->
+        <div id="inventory-panel" class="panel">
+            <form id="add-inventory-form" class="panel-form">
+                <h3>Add Inventory Item</h3>
+                <div class="form-group">
+                    <label>Item Name</label>
+                    <input type="text" id="inv-name" required placeholder="e.g. Eggs">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="inv-category">
+                        <option value="food">Food</option>
+                        <option value="ingredient">Ingredient</option>
+                        <option value="supply">Supply</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" step="any" id="inv-quantity" required placeholder="12">
+                    </div>
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <input type="text" id="inv-unit" required placeholder="pcs, g, ml">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Alert Threshold</label>
+                        <input type="number" step="any" id="inv-threshold" required placeholder="2">
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="inv-location" required placeholder="Fridge, Pantry">
+                    </div>
+                </div>
+                <button type="submit" class="form-btn">Add Item</button>
+            </form>
+            <div class="panel-content">
+                <h3>Current Inventory</h3>
+                <div id="inventory-list" class="item-list"></div>
+            </div>
+        </div>
+
+        <!-- Pets Panel -->
+        <div id="pets-panel" class="panel">
+            <form id="add-pet-form" class="panel-form">
+                <h3>Add Pet Profile</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="pet-name" required placeholder="e.g. Max">
+                    </div>
+                    <div class="form-group">
+                        <label>Species</label>
+                        <input type="text" id="pet-species" required placeholder="e.g. dog, cat">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Breed</label>
+                    <input type="text" id="pet-breed" placeholder="e.g. Golden Retriever">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Age (years)</label>
+                        <input type="number" step="any" id="pet-age" placeholder="3">
+                    </div>
+                    <div class="form-group">
+                        <label>Weight (kg)</label>
+                        <input type="number" step="any" id="pet-weight" placeholder="25">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Feeding Time (HH:MM)</label>
+                        <input type="text" id="pet-feed-time" placeholder="08:00">
+                    </div>
+                    <div class="form-group">
+                        <label>Feeding Amount</label>
+                        <input type="text" id="pet-feed-amount" placeholder="1 cup">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Medical Conditions</label>
+                    <input type="text" id="pet-conditions" placeholder="e.g. None">
+                </div>
+                <button type="submit" class="form-btn">Save Profile</button>
+            </form>
+            <div class="panel-content">
+                <h3>Pet Profiles</h3>
+                <div id="pets-list" class="item-list"></div>
+            </div>
+        </div>
+
+        <!-- Family/Friends Panel -->
+        <div id="people-panel" class="panel">
+            <form id="add-person-form" class="panel-form">
+                <h3>Add Family & Friend Profile</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="person-name" required placeholder="e.g. Alice">
+                    </div>
+                    <div class="form-group">
+                        <label>Relationship</label>
+                        <input type="text" id="person-relationship" required placeholder="e.g. Sister, Friend">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" id="person-age" placeholder="28">
+                    </div>
+                    <div class="form-group">
+                        <label>Birthday</label>
+                        <input type="text" id="person-birthday" placeholder="October 12">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Food Preferences (comma-sep)</label>
+                    <input type="text" id="person-food" placeholder="e.g. Vegetarian, Loves pasta">
+                </div>
+                <div class="form-group">
+                    <label>Hobbies (comma-sep)</label>
+                    <input type="text" id="person-hobbies" placeholder="e.g. Painting, Chess">
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="person-notes" placeholder="e.g. Speaks Spanish, allergic to nuts" rows="2"></textarea>
+                </div>
+                <button type="submit" class="form-btn">Save Profile</button>
+            </form>
+            <div class="panel-content">
+                <h3>Family & Friends</h3>
+                <div id="people-list" class="item-list"></div>
+            </div>
+        </div>
     </div>
 
     <script>
+        // --- Navigation Panel Switcher ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById('chat-container').style.display = 'none';
+
+            if (tabId === 'chat') {
+                document.getElementById('tab-chat').classList.add('active');
+                document.getElementById('chat-container').style.display = 'flex';
+            } else {
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+                document.getElementById(`${tabId}-panel`).classList.add('active');
+                loadPanelData(tabId);
+            }
+        }
+
+        async function loadPanelData(tabId) {
+            if (!window.renineAPI) return;
+
+            try {
+                if (tabId === 'inventory') {
+                    const listElement = document.getElementById('inventory-list');
+                    listElement.innerHTML = '<div style="color: var(--text-muted)">Loading items...</div>';
+                    const items = await window.renineAPI.invoke('renine:db-action', { action: 'get-inventory' });
+                    listElement.innerHTML = '';
+                    if (!items || items.length === 0) {
+                        listElement.innerHTML = '<div style="color: var(--text-muted)">Inventory is empty.</div>';
+                        return;
+                    }
+                    items.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'item-card';
+                        card.innerHTML = `
+                            <div class="item-info">
+                                <div class="item-title">${item.name}</div>
+                                <div class="item-meta">Category: ${item.category} | Location: ${item.location}</div>
+                                <div class="item-meta">Qty: ${item.quantity} ${item.unit} (Alert threshold: ${item.threshold})</div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="action-btn danger" onclick="deleteInventoryItem('${item.name}')">Delete</button>
+                            </div>
+                        `;
+                        listElement.appendChild(card);
+                    });
+                } else if (tabId === 'pets') {
+                    const listElement = document.getElementById('pets-list');
+                    listElement.innerHTML = '<div style="color: var(--text-muted)">Loading pets...</div>';
+                    const pets = await window.renineAPI.invoke('renine:db-action', { action: 'get-pets' });
+                    listElement.innerHTML = '';
+                    if (!pets || pets.length === 0) {
+                        listElement.innerHTML = '<div style="color: var(--text-muted)">No pets found.</div>';
+                        return;
+                    }
+                    pets.forEach(pet => {
+                        const sched = pet.feeding_schedule && pet.feeding_schedule.length > 0 
+                            ? pet.feeding_schedule.map(s => `${s.time} (${s.amount})`).join(', ')
+                            : 'None';
+                        const lastFedStr = pet.last_fed ? new Date(pet.last_fed).toLocaleTimeString() : 'Never';
+                        const card = document.createElement('div');
+                        card.className = 'item-card';
+                        card.innerHTML = `
+                            <div class="item-info">
+                                <div class="item-title">${pet.name} (${pet.species})</div>
+                                <div class="item-meta">Breed: ${pet.breed || 'Unknown'} | Age: ${pet.age || '?'} yrs | Weight: ${pet.weight || '?'} kg</div>
+                                <div class="item-meta">Feeding Schedule: ${sched}</div>
+                                <div class="item-meta">Last Fed: ${lastFedStr}</div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="action-btn success" onclick="feedPet('${pet.name}')">Feed</button>
+                                <button class="action-btn danger" onclick="deletePet('${pet.name}')">Delete</button>
+                            </div>
+                        `;
+                        listElement.appendChild(card);
+                    });
+                } else if (tabId === 'people') {
+                    const listElement = document.getElementById('people-list');
+                    listElement.innerHTML = '<div style="color: var(--text-muted)">Loading profiles...</div>';
+                    const people = await window.renineAPI.invoke('renine:db-action', { action: 'get-people' });
+                    listElement.innerHTML = '';
+                    if (!people || people.length === 0) {
+                        listElement.innerHTML = '<div style="color: var(--text-muted)">No family or friend profiles found.</div>';
+                        return;
+                    }
+                    people.forEach(person => {
+                        const card = document.createElement('div');
+                        card.className = 'item-card';
+                        card.innerHTML = `
+                            <div class="item-info">
+                                <div class="item-title">${person.name} (${person.relationship})</div>
+                                <div class="item-meta">Age: ${person.age || '?'} | Birthday: ${person.birthday || 'None'}</div>
+                                <div class="item-meta">Preferences: ${person.food_preferences ? person.food_preferences.join(', ') : 'None'}</div>
+                                <div class="item-meta">Notes: ${person.notes || 'None'}</div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="action-btn danger" onclick="deletePerson('${person.name}')">Delete</button>
+                            </div>
+                        `;
+                        listElement.appendChild(card);
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to load panel data:', err);
+            }
+        }
+
+        async function deleteInventoryItem(name) {
+            if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+            await window.renineAPI.invoke('renine:db-action', { action: 'delete-inventory', payload: { name } });
+            loadPanelData('inventory');
+        }
+
+        async function deletePet(name) {
+            if (!confirm(`Are you sure you want to delete pet ${name}?`)) return;
+            await window.renineAPI.invoke('renine:db-action', { action: 'delete-pet', payload: { name } });
+            loadPanelData('pets');
+        }
+
+        async function feedPet(name) {
+            await window.renineAPI.send('renine:send-message', { text: `feed ${name}` });
+            alert(`Feeding event recorded for ${name}!`);
+            setTimeout(() => loadPanelData('pets'), 500);
+        }
+
+        async function deletePerson(name) {
+            if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+            await window.renineAPI.invoke('renine:db-action', { action: 'delete-person', payload: { name } });
+            loadPanelData('people');
+        }
+
+        // --- Form Submission Listeners ---
+        document.getElementById('add-inventory-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('inv-name').value.trim();
+            const category = document.getElementById('inv-category').value;
+            const quantity = parseFloat(document.getElementById('inv-quantity').value);
+            const unit = document.getElementById('inv-unit').value.trim();
+            const threshold = parseFloat(document.getElementById('inv-threshold').value);
+            const location = document.getElementById('inv-location').value.trim();
+
+            if (!name || isNaN(quantity) || isNaN(threshold)) return;
+
+            await window.renineAPI.invoke('renine:db-action', {
+                action: 'add-inventory',
+                payload: { name, category, quantity, unit, threshold, location }
+            });
+            
+            document.getElementById('add-inventory-form').reset();
+            loadPanelData('inventory');
+        });
+
+        document.getElementById('add-pet-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('pet-name').value.trim();
+            const species = document.getElementById('pet-species').value.trim();
+            const breed = document.getElementById('pet-breed').value.trim() || null;
+            const ageVal = document.getElementById('pet-age').value;
+            const age = ageVal ? parseFloat(ageVal) : null;
+            const weightVal = document.getElementById('pet-weight').value;
+            const weight = weightVal ? parseFloat(weightVal) : null;
+            const feedTime = document.getElementById('pet-feed-time').value.trim();
+            const feedAmount = document.getElementById('pet-feed-amount').value.trim();
+            const conditionsRaw = document.getElementById('pet-conditions').value.trim();
+
+            if (!name || !species) return;
+
+            const feeding_schedule = feedTime ? [{ time: feedTime, amount: feedAmount || 'standard' }] : [];
+            const medical_conditions = conditionsRaw ? conditionsRaw.split(',').map(s => s.trim()) : [];
+            const medications = []; // Simple tracking placeholder
+
+            await window.renineAPI.invoke('renine:db-action', {
+                action: 'add-pet',
+                payload: { name, species, breed, age, weight, feeding_schedule, medical_conditions, medications }
+            });
+
+            document.getElementById('add-pet-form').reset();
+            loadPanelData('pets');
+        });
+
+        document.getElementById('add-person-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('person-name').value.trim();
+            const relationship = document.getElementById('person-relationship').value.trim();
+            const ageVal = document.getElementById('person-age').value;
+            const age = ageVal ? parseInt(ageVal, 10) : null;
+            const birthday = document.getElementById('person-birthday').value.trim() || null;
+            const foodRaw = document.getElementById('person-food').value.trim();
+            const hobbiesRaw = document.getElementById('person-hobbies').value.trim();
+            const notes = document.getElementById('person-notes').value.trim();
+
+            if (!name || !relationship) return;
+
+            const food_preferences = foodRaw ? foodRaw.split(',').map(s => s.trim()) : [];
+            const hobbies = hobbiesRaw ? hobbiesRaw.split(',').map(s => s.trim()) : [];
+            const personality_traits = [];
+            const goals = [];
+            const habits = [];
+
+            await window.renineAPI.invoke('renine:db-action', {
+                action: 'add-person',
+                payload: { name, relationship, age, birthday, food_preferences, hobbies, personality_traits, goals, habits, notes }
+            });
+
+            document.getElementById('add-person-form').reset();
+            loadPanelData('people');
+        });
+
         // --- ChatWindow Logic ---
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const voiceButton = document.getElementById('voice-button');
         const messageArea = document.getElementById('message-area');
         const voiceIndicator = document.getElementById('voice-indicator');
-        const statusDot = document.getElementById('status-dot');
-        const statusText = document.getElementById('status-text');
 
         let voiceActive = false;
 
@@ -89,7 +439,6 @@
             addMessage('user', text);
             messageInput.value = '';
 
-            // Remove welcome message on first send
             const welcome = messageArea.querySelector('.welcome-message');
             if (welcome) welcome.remove();
 
@@ -113,7 +462,6 @@
             }
         });
 
-        // --- Listen for responses from backend ---
         if (window.renineAPI) {
             window.renineAPI.on('renine:receive-response', (data) => {
                 addMessage('assistant', data.content);

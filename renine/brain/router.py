@@ -64,8 +64,8 @@ class RouteDecision:
 def route(user_input: str, context: list[dict[str, str]] | None = None) -> RouteDecision:
     """Route user input to the appropriate handler.
 
-    In Phase 1, all inputs are routed to MainBrainAgent.
-    Future phases will implement intent classification here.
+    Routes input dynamically based on keywords for specialized agents
+    in Phase 3, falling back to MainBrainAgent for conversation.
 
     Args:
         user_input: The user's text input.
@@ -82,7 +82,45 @@ def route(user_input: str, context: list[dict[str, str]] | None = None) -> Route
             metadata={"reason": "empty_input"},
         )
 
-    # Phase 1: All non-empty inputs go to MainBrainAgent
+    query = user_input.lower().strip()
+
+    # Phase 3 specialized routing rules
+    if (
+        "what can we cook" in query
+        or "what to cook" in query
+        or "list inventory" in query
+        or "show inventory" in query
+    ):
+        logger.info("routing_to_inventory_agent", input=user_input)
+        return RouteDecision(
+            target=RouteTarget.INVENTORY_AGENT,
+            confidence=1.0,
+            metadata={"reason": "inventory_keywords"},
+        )
+
+    if (
+        "what appliances are in" in query
+        or "what items are in" in query
+        or "what is in the" in query
+        or "list house" in query
+        or "show house" in query
+    ):
+        logger.info("routing_to_house_agent", input=user_input)
+        return RouteDecision(
+            target=RouteTarget.HOUSE_AGENT,
+            confidence=1.0,
+            metadata={"reason": "house_keywords"},
+        )
+
+    if "list pets" in query or "show pets" in query or "feed " in query:
+        logger.info("routing_to_pet_agent", input=user_input)
+        return RouteDecision(
+            target=RouteTarget.PET_AGENT,
+            confidence=1.0,
+            metadata={"reason": "pet_keywords"},
+        )
+
+    # Fallback to MainBrainAgent
     logger.info(
         "input_routed",
         target=RouteTarget.MAIN_BRAIN.value,
@@ -92,5 +130,5 @@ def route(user_input: str, context: list[dict[str, str]] | None = None) -> Route
     return RouteDecision(
         target=RouteTarget.MAIN_BRAIN,
         confidence=1.0,
-        metadata={"phase": 1, "method": "default_routing"},
+        metadata={"phase": 3, "method": "default_routing"},
     )

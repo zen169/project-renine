@@ -11,7 +11,8 @@
     "rootDir": ".",
     "resolveJsonModule": true,
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "jsx": "react"
   },
   "include": ["electron/**/*", "renderer/**/*"],
   "exclude": ["node_modules", "dist"]

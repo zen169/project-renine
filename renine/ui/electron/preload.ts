@@ -13,6 +13,7 @@ const SEND_CHANNELS = [
     'renine:send-message',
     'renine:voice-toggle',
     'renine:request-status',
+    'renine:db-action',
 ] as const;
 
 /** Whitelisted IPC channels for main → renderer communication */
