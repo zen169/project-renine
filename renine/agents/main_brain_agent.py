@@ -44,9 +44,15 @@ to the user. You are Renine, not a language model."""
 class MainBrainAgent(BaseAgent):
     """Primary conversation and planning agent.
 
-    Handles direct conversation with the user and will delegate
+    Handles direct conversation with the user and delegates
     to specialized agents in future phases.
     """
+
+    def __init__(self, memory_agent: MemoryAgent | None = None) -> None:
+        """Initialize the MainBrainAgent and its MemoryAgent helper."""
+        from renine.agents.memory_agent import MemoryAgent
+        self.memory_agent = memory_agent or MemoryAgent()
+        super().__init__()
 
     def get_manifest(self) -> AgentManifest:
         """Return the main brain agent's capability manifest.
@@ -71,8 +77,8 @@ class MainBrainAgent(BaseAgent):
     ) -> dict[str, Any]:
         """Process user input through the Ollama LLM.
 
-        Builds the message history from context, sends to Qwen3 8B,
-        and returns the response.
+        Builds the message history from context, injects memory context,
+        sends to Qwen3 8B, and returns the response.
 
         Args:
             user_input: The user's text input.
@@ -82,9 +88,11 @@ class MainBrainAgent(BaseAgent):
         Returns:
             Dictionary with "content", "source_agent", and "success" keys.
         """
-        messages = self._build_messages(user_input, context)
-
         try:
+            memory_result = self.memory_agent.process(user_input)
+            memory_context = memory_result.get("content", "")
+            messages = self._build_messages(user_input, context, memory_context)
+
             response_content = ollama_client.chat(
                 messages=messages,
                 system_prompt=_PERSONALITY_PROMPT,
@@ -115,12 +123,14 @@ class MainBrainAgent(BaseAgent):
         self,
         user_input: str,
         context: list[dict[str, str]] | None,
+        memory_context: str | None = None,
     ) -> list[dict[str, str]]:
         """Build the message list for the LLM from context and current input.
 
         Args:
             user_input: Current user message.
             context: Previous conversation messages.
+            memory_context: Memory context to inject.
 
         Returns:
             Complete message list for the LLM.
@@ -129,6 +139,12 @@ class MainBrainAgent(BaseAgent):
 
         if context:
             messages.extend(context)
+
+        if memory_context and memory_context != "No relevant memories found.":
+            messages.append({
+                "role": "system",
+                "content": f"Relevant memory context for this turn:\n{memory_context}",
+            })
 
         messages.append({"role": "user", "content": user_input})
         return messages
