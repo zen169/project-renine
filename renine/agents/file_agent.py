@@ -55,7 +55,12 @@ def _update_or_create_index_record(db: Any, file_path: Path, stat: Any) -> None:
     idx_item = db.scalars(stmt).first()
 
     if idx_item:
-        if idx_item.file_size == stat.st_size and idx_item.last_modified == last_mod:
+        db_dt = idx_item.last_modified
+        if db_dt.tzinfo is None:
+            db_dt = db_dt.replace(tzinfo=datetime.timezone.utc)
+        db_ts = db_dt.timestamp()
+        file_ts = last_mod.timestamp()
+        if idx_item.file_size == stat.st_size and abs(db_ts - file_ts) < 1.0:
             return  # Unchanged
         idx_item.file_size = stat.st_size
         idx_item.last_modified = last_mod

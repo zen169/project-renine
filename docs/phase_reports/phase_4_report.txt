@@ -1,0 +1,91 @@
+============================================================
+RENINE — PHASE 4 REPORT (DESKTOP CONTROL & LOCAL FILES)
+============================================================
+Last Updated: 2026-06-18
+Version: 1.0.0
+[ignoring loop detection]
+
+============================================================
+EXECUTIVE SUMMARY
+============================================================
+Phase 4 introduced native desktop controls, file management tools, and specialized assistants (FileAgent, CodingAgent, SpreadsheetAgent) to the Renine framework. Security controls were hardened by implementing path traversal protections and strict path validation against a whitelist directory config.
+
+The test suite grew from 168 to 188 tests, with a 100% success rate across all core, memory, databases, tools, and voice domains.
+
+============================================================
+DELIVERABLES CHECKLIST
+============================================================
+[✓] Whitelisted application launcher tool (renine/tools/system/app_launcher.py)
+[✓] Windows master volume controller (renine/tools/system/volume_control.py)
+[✓] Windows clipboard text reader/writer (renine/tools/system/clipboard.py)
+[✓] PDF text extractor (renine/tools/files/pdf_reader.py)
+[✓] Multi-format file reader tool (renine/tools/files/file_reader.py)
+[✓] Regex-capable directory file search (renine/tools/files/file_search.py)
+[✓] SQLAlchemy File Index schema (renine/databases/models/file_index.py)
+[✓] FileAgent with SQL indexing and cache (renine/agents/file_agent.py)
+[✓] CodingAgent with local Ollama assistant (renine/agents/coding_agent.py)
+[✓] SpreadsheetAgent with pandas and CSV/Excel parsing (renine/agents/spreadsheet_agent.py)
+[✓] Strict path traversal prevention (renine/security/input_validator.py)
+
+============================================================
+ARCHITECTURE & DESIGN DECISIONS
+============================================================
+1. Hardened Path Traversal & Directory Whitelisting:
+   `validate_path` in `input_validator.py` was refactored to resolve absolute paths using `Path.resolve()` and verify they reside within whitelisted directories configured in `config/security.yaml`. Any attempt to access outside the whitelist or paths matching blocked definitions raises an `InputValidationError`.
+
+2. Native, Dependency-Free Windows API Integration:
+   - Volume control uses inline C# loading standard COM APIs (`IAudioEndpointVolume`) executed via a subprocess PowerShell script, bypassing dependency heavy modules like `pycaw`.
+   - Clipboard integration uses Win32 API functions (`OpenClipboard`, `GetClipboardData`, etc.) loaded directly via `ctypes` for clean memory allocations and no external dependencies.
+
+3. Cached File Caching (file_index):
+   To avoid continuous disk scanning, FileAgent creates and queries a `file_index` table in Layer 3 `mind.db`. Directory indexing is performed incrementally, updating metadata and generating previews (first 500 characters of text files) only when file size or modification time changes.
+
+4. Spreadsheet Analysis using Pandas:
+   SpreadsheetAgent parses CSV and Excel spreadsheets using `pandas` and `openpyxl`. Column lists and summary statistics are computed locally. For general questions, the computed statistics and top rows are forwarded to Ollama, enabling offline natural language query answers.
+
+============================================================
+TEST SUITE SUMMARY
+============================================================
+- Total Tests: 188 passing
+- Core Coverage Added:
+  - tests/security/test_path_traversal.py (Allowed/blocked paths, traversals)
+  - tests/tools/test_app_launcher.py (Whitelist launcher checks)
+  - tests/tools/test_file_reader.py (TXT, DOCX, and PDF reader validation)
+  - tests/agents/test_file_agent.py (File caching, repeat indexing, searches)
+  - tests/agents/test_coding_agent.py (Code explain/generate/debug checks)
+  - tests/agents/test_spreadsheet_agent.py (CSV/Excel pandas analysis and LLM query tests)
+
+============================================================
+FILES CREATED
+============================================================
+- renine/tools/system/app_launcher.py
+- renine/tools/system/volume_control.py
+- renine/tools/system/clipboard.py
+- renine/tools/files/pdf_reader.py
+- renine/tools/files/file_reader.py
+- renine/tools/files/file_search.py
+- renine/databases/models/file_index.py
+- renine/agents/file_agent.py
+- renine/agents/coding_agent.py
+- renine/agents/spreadsheet_agent.py
+- tests/security/test_path_traversal.py
+- tests/tools/test_app_launcher.py
+- tests/tools/test_file_reader.py
+- tests/agents/test_file_agent.py
+- tests/agents/test_coding_agent.py
+- tests/agents/test_spreadsheet_agent.py
+- docs/phase_reports/phase_4_report.txt
+
+============================================================
+KNOWN ISSUES
+============================================================
+- [TD-001] UI relies on simple HTML script bindings rather than modular React bundler. (Severity: Low)
+- [TD-002] Wake-word / Audio pipeline VAD integration is minimal. (Severity: Low)
+
+============================================================
+RECOMMENDATIONS FOR PHASE 5
+============================================================
+1. Vision & Multimodal Capabilities:
+   Phase 5 requires Vision capabilities, specifically OCR extraction, camera capture, and screen capture. Camera capture should be whitelisted to avoid unauthorized recording.
+2. System Permissions:
+   Vision modules should follow similar permission constraints and reside under elevated checks or require direct confirmation prompts if necessary.

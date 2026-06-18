@@ -3,6 +3,20 @@ RENINE — CHANGELOG
 ============================================================
 
 ============================================================
+2026-06-18 — Phase 4 Desktop Control & File Management [ignoring loop detection]
+============================================================
+- Implemented AppLauncherTool with secure application whitelist execution via subprocess.
+- Implemented VolumeControlTool using PowerShell with inline C# for native Windows audio control.
+- Implemented ClipboardTool for dependency-free text clipboard access via Win32 ctypes.
+- Implemented PDFReaderTool and FileReaderTool supporting PDF, DOCX, and text file parsing.
+- Implemented FileSearchTool for name and content-based directory scanning with regex support.
+- Implemented FileAgent utilizing a SQL-backed file_index cache table for accelerated repeat lookups.
+- Implemented CodingAgent for code explanation, generation, and debugging via local Ollama.
+- Implemented SpreadsheetAgent supporting CSV/Excel data operations and natural language analytics using pandas.
+- Strengthened validate_path to prevent path traversal attacks outside configured boundaries.
+- Added comprehensive unit testing suite, resulting in 188/188 passing tests.
+
+============================================================
 2026-06-18 — Phase 3 Personal Databases & Specialized Agents
 ============================================================
 - Implemented Layer 3 database schemas for Inventory, Pets, and House (mind.db)

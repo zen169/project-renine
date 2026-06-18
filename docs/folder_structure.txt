@@ -30,7 +30,10 @@ Renine/
 │   │   ├── memory_agent.py
 │   │   ├── inventory_agent.py
 │   │   ├── pet_agent.py
-│   │   └── house_agent.py
+│   │   ├── house_agent.py
+│   │   ├── file_agent.py
+│   │   ├── coding_agent.py
+│   │   └── spreadsheet_agent.py
 │   ├── memory/
 │   │   ├── __init__.py
 │   │   ├── layer1_context.py
@@ -50,7 +53,8 @@ Renine/
 │   │   │   ├── personality.py
 │   │   │   ├── inventory.py
 │   │   │   ├── pets.py
-│   │   │   └── house.py
+│   │   │   ├── house.py
+│   │   │   └── file_index.py
 │   │   └── migrations/
 │   ├── tools/
 │   │   ├── __init__.py
@@ -58,9 +62,15 @@ Renine/
 │   │   ├── registry.py
 │   │   ├── executor.py
 │   │   ├── system/
-│   │   │   └── __init__.py
+│   │   │   ├── __init__.py
+│   │   │   ├── app_launcher.py
+│   │   │   ├── volume_control.py
+│   │   │   └── clipboard.py
 │   │   ├── files/
-│   │   │   └── __init__.py
+│   │   │   ├── __init__.py
+│   │   │   ├── pdf_reader.py
+│   │   │   ├── file_reader.py
+│   │   │   └── file_search.py
 │   │   ├── scheduling/
 │   │   │   └── __init__.py
 │   │   └── web/
@@ -137,7 +147,8 @@ Renine/
 │   └── phase_reports/
 │       ├── phase_1_report.txt
 │       ├── phase_2_report.txt
-│       └── phase_3_report.txt
+│       ├── phase_3_report.txt
+│       └── phase_4_report.txt
 │
 └── tests/
     ├── __init__.py
@@ -159,7 +170,10 @@ Renine/
     │   ├── test_memory_agent.py
     │   ├── test_inventory_agent.py
     │   ├── test_pet_agent.py
-    │   └── test_house_agent.py
+    │   ├── test_house_agent.py
+    │   ├── test_file_agent.py
+    │   ├── test_coding_agent.py
+    │   └── test_spreadsheet_agent.py
     ├── memory/
     │   ├── __init__.py
     │   ├── test_expiration.py
@@ -171,7 +185,9 @@ Renine/
     │   └── test_retrieval.py
     ├── tools/
     │   ├── __init__.py
-    │   └── test_registry.py
+    │   ├── test_registry.py
+    │   ├── test_app_launcher.py
+    │   └── test_file_reader.py
     ├── voice/
     │   ├── __init__.py
     │   ├── test_stt.py
@@ -180,4 +196,5 @@ Renine/
     └── security/
         ├── __init__.py
         ├── test_input_validator.py
-        └── test_confirmation_gate.py
+        ├── test_confirmation_gate.py
+        └── test_path_traversal.py

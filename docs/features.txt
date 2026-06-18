@@ -55,9 +55,23 @@ PHASE 3 — IMPLEMENTED
 [x] Electron UI panels for Inventory, Pets, and Family/Friends profiles
 
 ============================================================
-PHASE 4–9 — PLANNED
+PHASE 4 — IMPLEMENTED
 ============================================================
-[ ] Desktop control and file agents
+[x] App Launcher with secure, whitelist-based configuration
+[x] Windows Volume Control (via PowerShell with inline C# COM API)
+[x] Windows Clipboard text reader/writer (Win32 ctypes implementation)
+[x] PDF Text Extractor (PyMuPDF / fitz integration)
+[x] Secure File Reader (TXT, DOCX, and PDF) with size limits
+[x] Regex-compatible File Search tool
+[x] Layer 3 Local File Index database model and tracking table
+[x] FileAgent with directory scanning, preview extraction, and DB caching
+[x] CodingAgent with code explanation, generation, and debugging via local Ollama
+[x] SpreadsheetAgent with CSV/Excel pandas analysis and LLM query parsing
+[x] Path traversal protection and allowed/blocked path validation
+
+============================================================
+PHASE 5–9 — PLANNED
+============================================================
 [ ] Vision (OCR, screenshots, webcam)
 [ ] Browser, email, and news agents
 [ ] Smart home integration

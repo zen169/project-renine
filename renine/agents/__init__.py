@@ -6,6 +6,9 @@ from renine.agents.memory_agent import MemoryAgent
 from renine.agents.inventory_agent import InventoryAgent
 from renine.agents.pet_agent import PetAgent
 from renine.agents.house_agent import HouseAgent
+from renine.agents.file_agent import FileAgent
+from renine.agents.coding_agent import CodingAgent
+from renine.agents.spreadsheet_agent import SpreadsheetAgent
 
 __all__ = [
     "MainBrainAgent",
@@ -13,4 +16,7 @@ __all__ = [
     "InventoryAgent",
     "PetAgent",
     "HouseAgent",
+    "FileAgent",
+    "CodingAgent",
+    "SpreadsheetAgent",
 ]

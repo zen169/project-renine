@@ -70,6 +70,18 @@ renine/agents/house_agent.py
   → Room, appliance, and furniture tracking agent
   → HouseAgent.process(), query_house_status()
 
+renine/agents/file_agent.py
+  → File management agent (indexing + DB lookup + reading)
+  → FileAgent.process(), index_allowed_directories()
+
+renine/agents/coding_agent.py
+  → Programming assistant (explains, generates, and debugs code)
+  → CodingAgent.process()
+
+renine/agents/spreadsheet_agent.py
+  → Excel/CSV analysis helper (pandas computations + LLM analysis)
+  → SpreadsheetAgent.process()
+
 ============================================================
 MEMORY
 ============================================================
@@ -132,6 +144,10 @@ renine/databases/models/house.py
   → SQLAlchemy model for room items/appliances/furniture
   → HouseItem class
 
+renine/databases/models/file_index.py
+  → SQLAlchemy model for local files metadata index
+  → FileIndex class
+
 ============================================================
 VOICE
 ============================================================
@@ -179,3 +195,27 @@ renine/tools/registry.py
 renine/tools/executor.py
   → Safe tool execution pipeline
   → execute_tool()
+
+renine/tools/system/app_launcher.py
+  → Tool to launch whitelisted apps using subprocess
+  → AppLauncherTool class
+
+renine/tools/system/volume_control.py
+  → Tool to adjust master sound volume via PowerShell
+  → VolumeControlTool class
+
+renine/tools/system/clipboard.py
+  → Tool to get/set clipboard text via Win32 ctypes
+  → ClipboardTool class
+
+renine/tools/files/pdf_reader.py
+  → Tool to extract text from PDF documents using PyMuPDF
+  → PDFReaderTool class
+
+renine/tools/files/file_reader.py
+  → Tool to read TXT, PDF, and DOCX documents securely
+  → FileReaderTool class
+
+renine/tools/files/file_search.py
+  → Tool to search files by name, type, and content
+  → FileSearchTool class
