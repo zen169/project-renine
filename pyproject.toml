@@ -42,6 +42,12 @@ dependencies = [
     "sounddevice>=0.4.0",
     "numpy>=1.26.0",
     "webrtcvad>=2.0.10",
+
+    # --- Phase 4 Desktop, Files, and Spreadsheets ---
+    "pymupdf>=1.24.0",
+    "python-docx>=1.1.0",
+    "openpyxl>=3.1.0",
+    "pandas>=2.1.0",
 ]
 
 [project.optional-dependencies]

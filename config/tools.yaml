@@ -8,24 +8,31 @@
 tools:
   # --- System Tools (Phase 4) ---
   app_launcher:
-    enabled: false
+    enabled: true
     permission_level: 2  # ELEVATED — requires confirmation
+    whitelist:
+      - notepad
+      - calc
+      - cmd
+      - explorer
+      - mspaint
+      - taskmgr
   volume_control:
-    enabled: false
+    enabled: true
     permission_level: 1  # STANDARD
   clipboard:
-    enabled: false
+    enabled: true
     permission_level: 1  # STANDARD
 
   # --- File Tools (Phase 4) ---
   file_reader:
-    enabled: false
+    enabled: true
     permission_level: 0  # READ_ONLY
   file_search:
-    enabled: false
+    enabled: true
     permission_level: 0  # READ_ONLY
   pdf_reader:
-    enabled: false
+    enabled: true
     permission_level: 0  # READ_ONLY
 
   # --- Scheduling Tools (Phase 3) ---

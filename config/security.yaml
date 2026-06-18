@@ -42,7 +42,8 @@ security:
       - "C:\\ProgramData"
     
     # Paths that are allowed (configured per user in Phase 4)
-    allowed_paths: []
+    allowed_paths:
+      - "C:\\Users\\efren\\Downloads\\PROJECT RENINE V1.0"
     
     # Max file size for reading (bytes)
     max_read_size_bytes: 52428800  # 50 MB

@@ -109,6 +109,26 @@ def validate_path(path_str: str) -> Path:
                 f"Access to '{blocked}' is blocked by security policy."
             )
 
+    # Check against allowed paths if configured
+    allowed_paths = fs_config.get("allowed_paths", [])
+    if allowed_paths:
+        is_allowed = False
+        for allowed_str in allowed_paths:
+            allowed_path = Path(allowed_str).resolve()
+            try:
+                path.relative_to(allowed_path)
+                is_allowed = True
+                break
+            except ValueError:
+                # Fallback check for drive letter casing or absolute paths on Windows
+                if str(path).lower().startswith(str(allowed_path).lower()):
+                    is_allowed = True
+                    break
+        if not is_allowed:
+            raise InputValidationError(
+                f"Access to '{path_str}' is blocked (not within allowed paths)."
+            )
+
     return path
 
 
