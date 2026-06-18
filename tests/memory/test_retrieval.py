@@ -34,6 +34,17 @@ def mock_chroma_client():
         yield mock_client, mock_collection
 
 
+@pytest.fixture(autouse=True)
+def clean_globals():
+    import renine.memory.retrieval as r
+    r._embedding_model = None
+    r._chroma_client = None
+    yield
+    r._embedding_model = None
+    r._chroma_client = None
+
+
+
 def test_get_embedding_model(mock_sentence_transformer):
     import renine.memory.retrieval as r
 
