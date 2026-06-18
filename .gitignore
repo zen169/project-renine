@@ -21,7 +21,7 @@ build/
 *.sqlite
 *.db
 
-models/
+/models/
 
 cache/
 
