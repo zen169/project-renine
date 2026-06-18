@@ -120,6 +120,31 @@ def route(user_input: str, context: list[dict[str, str]] | None = None) -> Route
             metadata={"reason": "pet_keywords"},
         )
 
+    # Phase 5 vision routing rules
+    vision_keywords = (
+        "screenshot",
+        "take a screenshot",
+        "capture screen",
+        "ocr",
+        "extract text from",
+        "read text from",
+        "describe image",
+        "describe screen",
+        "what do you see",
+        "analyze image",
+        "webcam",
+        "camera",
+        "list monitors",
+        "show monitors",
+    )
+    if any(kw in query for kw in vision_keywords):
+        logger.info("routing_to_vision_agent", input=user_input)
+        return RouteDecision(
+            target=RouteTarget.VISION_AGENT,
+            confidence=1.0,
+            metadata={"reason": "vision_keywords"},
+        )
+
     # Fallback to MainBrainAgent
     logger.info(
         "input_routed",
@@ -130,5 +155,5 @@ def route(user_input: str, context: list[dict[str, str]] | None = None) -> Route
     return RouteDecision(
         target=RouteTarget.MAIN_BRAIN,
         confidence=1.0,
-        metadata={"phase": 3, "method": "default_routing"},
+        metadata={"phase": 5, "method": "default_routing"},
     )

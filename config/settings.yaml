@@ -53,6 +53,28 @@ audio:
   silence_threshold_ms: 800
   max_recording_seconds: 30
 
+# --- Vision ---
+vision:
+  model: "${VISION_MODEL:-qwen2.5vl:7b}"
+  screenshot:
+    output_dir: "data/screenshots"
+    default_monitor: 1
+    image_format: "png"
+    max_dimension: 1920
+  webcam:
+    device_index: 0
+    resolution_width: 640
+    resolution_height: 480
+    require_consent: true
+  ocr:
+    max_image_size_bytes: 20971520  # 20 MB
+    supported_formats:
+      - ".png"
+      - ".jpg"
+      - ".jpeg"
+      - ".bmp"
+      - ".webp"
+
 # --- Models Directory ---
 models:
   base_dir: "models"
@@ -61,6 +83,6 @@ models:
 features:
   voice_enabled: true
   external_llm_fallback: false
-  vision_enabled: false
+  vision_enabled: true
   browser_agent_enabled: false
   smart_home_enabled: false

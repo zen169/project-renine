@@ -30,6 +30,7 @@ security:
       - calendar_events
       - daily_routines
       - shopping_lists
+      - vision
 
   # --- File System ---
   filesystem:
@@ -58,6 +59,7 @@ security:
       - system_shutdown
       - app_install
       - credential_access
+      - webcam_activate
     
     # Timeout for confirmation prompts (seconds)
     timeout_seconds: 30

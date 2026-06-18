@@ -25,6 +25,11 @@ Hierarchy:
     │   ├── STTError
     │   ├── TTSError
     │   └── WakeWordError
+    ├── VisionError
+    │   ├── ScreenshotError
+    │   ├── OCRError
+    │   ├── WebcamError
+    │   └── WebcamConsentError
     ├── SecurityError_
     │   ├── SanitizationError
     │   ├── InputValidationError
@@ -157,6 +162,31 @@ class TTSError(VoiceError):
 
 class WakeWordError(VoiceError):
     """Raised when wake word detection fails."""
+
+
+# ============================================================
+# Vision Errors
+# ============================================================
+
+
+class VisionError(RenineError):
+    """Base exception for vision pipeline errors."""
+
+
+class ScreenshotError(VisionError):
+    """Raised when screen capture fails."""
+
+
+class OCRError(VisionError):
+    """Raised when OCR processing fails."""
+
+
+class WebcamError(VisionError):
+    """Raised when webcam capture or release fails."""
+
+
+class WebcamConsentError(VisionError):
+    """Raised when webcam activation is denied due to missing user consent."""
 
 
 # ============================================================

@@ -46,6 +46,17 @@ tools:
     enabled: false
     permission_level: 1  # STANDARD
 
+  # --- Vision Tools (Phase 5) ---
+  screenshot:
+    enabled: true
+    permission_level: 0  # READ_ONLY
+  ocr:
+    enabled: true
+    permission_level: 0  # READ_ONLY
+  webcam:
+    enabled: true
+    permission_level: 2  # ELEVATED — requires user consent
+
   # --- Web Tools (Phase 6) ---
   browser:
     enabled: false
