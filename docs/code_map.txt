@@ -54,12 +54,59 @@ renine/agents/main_brain_agent.py
   → Primary conversation agent
   → MainBrainAgent.process()
 
+renine/agents/memory_agent.py
+  → Context retrieval agent
+  → MemoryAgent.process()
+
 ============================================================
 MEMORY
 ============================================================
 renine/memory/layer1_context.py
   → In-memory conversation context (rolling window)
   → ConversationContext, Message
+
+renine/memory/layer2_history.py
+  → Conversation history (SQLite with 48h TTL)
+  → store_conversation(), get_recent_conversations()
+
+renine/memory/layer3_mind.py
+  → Mind database (SQLite + ChromaDB namespace facts)
+  → store_fact(), get_fact(), search_facts()
+
+renine/memory/layer4_personality.py
+  → Personality database (SQLite + ChromaDB profile lookup)
+  → store_person(), get_person(), search_people()
+
+renine/memory/expiration.py
+  → Expiration cleanup scheduling for Layer 2 history
+  → start_expiration_scheduler(), stop_expiration_scheduler()
+
+renine/memory/retrieval.py
+  → Semantic vector search using BGE-M3
+  → search_vector_store(), add_to_vector_store()
+
+renine/memory/memory_manager.py
+  → Unified orchestrator for all memory layers
+  → MemoryManager class
+
+============================================================
+DATABASES
+============================================================
+renine/databases/session.py
+  → SQLite engine and session factory setup
+  → get_engine(), get_sessionmaker(), get_session()
+
+renine/databases/models/conversation.py
+  → SQLAlchemy model for conversation history
+  → Conversation class
+
+renine/databases/models/mind.py
+  → SQLAlchemy model for namespace facts
+  → MindRecord class
+
+renine/databases/models/personality.py
+  → SQLAlchemy model for person profiles
+  → Person class
 
 ============================================================
 VOICE

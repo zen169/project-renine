@@ -30,16 +30,16 @@ PHASE 1 — IMPLEMENTED
 [x] Electron UI shell (chat window, voice indicator)
 
 ============================================================
-PHASE 2 — PLANNED
+PHASE 2 — IMPLEMENTED
 ============================================================
-[ ] Layer 2 conversation history (SQLite, 48h TTL)
-[ ] Layer 3 mind database (SQLite + ChromaDB)
-[ ] Layer 4 personality database
-[ ] Memory manager unified interface
-[ ] Expiration service (APScheduler)
-[ ] Semantic retrieval (BGE-M3 + ChromaDB)
-[ ] SQLAlchemy models + Alembic migrations
-[ ] Memory agent (LangGraph integration)
+[x] Layer 2 conversation history (SQLite, 48h TTL)
+[x] Layer 3 mind database (SQLite + ChromaDB)
+[x] Layer 4 personality database (SQLite + ChromaDB)
+[x] Memory manager unified interface (MemoryManager)
+[x] Expiration service (APScheduler-based cleanup)
+[x] Semantic retrieval (BGE-M3 + ChromaDB)
+[x] SQLAlchemy models + Alembic migrations
+[x] Memory agent (context injection for MainBrainAgent)
 
 ============================================================
 PHASE 3–9 — PLANNED

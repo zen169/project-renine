@@ -13,7 +13,7 @@ Four-layer memory architecture:
   Layer 4: Personality database (SQLite + ChromaDB, Phase 2)
 
 ============================================================
-LAYER 1 — IMPLEMENTED (Phase 1)
+LAYER 1 — CURRENT CONTEXT (Phase 1)
 ============================================================
 File: renine/memory/layer1_context.py
 Storage: In-process Python list
@@ -24,10 +24,39 @@ Overflow: Oldest messages trimmed with system summary note
 Security: Never serialized to disk. Never sent externally.
 
 ============================================================
-LAYERS 2–4 — PLANNED (Phase 2)
+LAYER 2 — CONVERSATION HISTORY (Phase 2)
 ============================================================
-Configured in config/memory.yaml but not yet implemented.
-MemoryManager interface defined in architecture but not created.
+File: renine/memory/layer2_history.py
+Storage: SQLite (history.db)
+Lifetime: 48-hour Time-to-Live (TTL)
+Background Worker: renine/memory/expiration.py
+Details: Stores conversation summaries and raw turn JSON. The expiration worker uses APScheduler to delete records older than 48 hours.
+
+============================================================
+LAYER 3 — MIND DATABASE (Phase 2)
+============================================================
+File: renine/memory/layer3_mind.py
+Storage: SQLite (mind.db) + ChromaDB (mind_*)
+Lifetime: Persistent
+Details: Stores structured facts (key-value JSON) under specific namespaces (e.g. inventory, tasks, house, bills, notes). Synchronized with ChromaDB collections for semantic vector lookup based on user text queries.
+
+============================================================
+LAYER 4 — PERSONALITY DATABASE (Phase 2)
+============================================================
+File: renine/memory/layer4_personality.py
+Storage: SQLite (personality.db) + ChromaDB (personality)
+Lifetime: Persistent
+Details: Manages people profiles (name, relationship, age, birthday, hobbies, notes). Syncs a consolidated string summary of each profile to ChromaDB for semantic search capability.
+
+============================================================
+RETRIEVAL & INTEGRATION (Phase 2)
+============================================================
+Embedding: BAAI/bge-m3 on CUDA or CPU fallback (renine/memory/retrieval.py)
+Vector Store: chromadb.PersistentClient (data/chroma/)
+Unified API: renine/memory/memory_manager.py (MemoryManager class)
+Agent Flow:
+  - MemoryAgent (renine/agents/memory_agent.py) performs searches across Layers 2, 3, and 4.
+  - MainBrainAgent (renine/agents/main_brain_agent.py) calls MemoryAgent during the processing loop to inject relevant semantic memories as system prompt context for Ollama.
 
 ============================================================
 SECURITY RULES
@@ -35,3 +64,4 @@ SECURITY RULES
 - Layer 3 and Layer 4 are classified LOCAL ONLY
 - All data must pass through ContextSanitizer before any external call
 - ContextSanitizer STRIPS (not summarizes) local-only namespace data
+

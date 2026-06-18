@@ -30,10 +30,21 @@ renine/brain/
 
 renine/agents/
   base_agent.py     — ABC with manifest, memory access, permissions
-  main_brain_agent.py — Conversation via Ollama (supervisor node)
+  main_brain_agent.py — Conversation via Ollama with context injection
+  memory_agent.py   — Retrieves history, facts, and profile context
 
 renine/memory/
   layer1_context.py — In-memory rolling context window (max 50 msgs)
+  layer2_history.py — SQLite conversation history with 48h TTL
+  layer3_mind.py    — SQLite + ChromaDB namespace fact storage
+  layer4_personality.py — SQLite + ChromaDB people profile registry
+  expiration.py     — APScheduler-based cleanup for Layer 2 TTL
+  retrieval.py      — BGE-M3 embedding + ChromaDB semantic search
+  memory_manager.py — Unified orchestrator interface for memory layers
+
+renine/databases/
+  session.py        — Database engine and sessionmaker factories
+  models/           — SQLAlchemy schema models for SQLite tables
 
 renine/voice/
   wake_word.py      — Keyword detection with phonetic variants

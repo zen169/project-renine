@@ -26,16 +26,26 @@ Renine/
 │   ├── agents/
 │   │   ├── __init__.py
 │   │   ├── base_agent.py
-│   │   └── main_brain_agent.py
+│   │   ├── main_brain_agent.py
+│   │   └── memory_agent.py
 │   ├── memory/
 │   │   ├── __init__.py
-│   │   └── layer1_context.py
+│   │   ├── layer1_context.py
+│   │   ├── layer2_history.py
+│   │   ├── layer3_mind.py
+│   │   ├── layer4_personality.py
+│   │   ├── expiration.py
+│   │   ├── retrieval.py
+│   │   └── memory_manager.py
 │   ├── databases/
 │   │   ├── __init__.py
+│   │   ├── session.py
 │   │   ├── models/
-│   │   │   └── __init__.py
+│   │   │   ├── __init__.py
+│   │   │   ├── conversation.py
+│   │   │   ├── mind.py
+│   │   │   └── personality.py
 │   │   └── migrations/
-│   │       └── .gitkeep
 │   ├── tools/
 │   │   ├── __init__.py
 │   │   ├── permissions.py

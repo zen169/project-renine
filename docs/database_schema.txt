@@ -4,31 +4,64 @@ RENINE — DATABASE SCHEMA
 Last Updated: 2026-06-18
 
 ============================================================
-STATUS
+DATABASE INSTANCES
 ============================================================
-No databases created in Phase 1. All database paths are
-configured in config/settings.yaml and config/memory.yaml.
-SQLAlchemy models and Alembic migrations will be created in Phase 2.
+All databases are locally stored SQLite files with an accompanying
+ChromaDB directory for semantic embeddings.
+
+- data/history.db     — Conversation history (Layer 2)
+- data/mind.db        — Structured facts (Layer 3)
+- data/personality.db  — People profiles (Layer 4)
+- data/chroma/        — Vector database containing embeddings
 
 ============================================================
-PLANNED DATABASES (Phase 2)
+TABLE SCHEMA DETAILS
 ============================================================
-data/history.db    — Layer 2 conversation history
-data/mind.db       — Layer 3 structured memory
-data/personality.db — Layer 4 people profiles
-data/chroma/       — ChromaDB vector store
+
+------------------------------------------------------------
+history.db -> conversations
+------------------------------------------------------------
+Stores summaries of past conversation sessions with raw chat turns.
+- id (INTEGER): Primary Key, Autoincrement
+- date (DATE): Date of the conversation session (NOT NULL)
+- summary (VARCHAR): Text summary of the session (NOT NULL)
+- raw_turns (JSON): Raw list of chat turns (role, content) (NOT NULL)
+- created_at (DATETIME): Record creation timestamp (NOT NULL)
+
+------------------------------------------------------------
+mind.db -> mind_records
+------------------------------------------------------------
+Stores key-value configurations and facts classified by namespaces.
+- id (INTEGER): Primary Key, Autoincrement
+- namespace (VARCHAR): Name of the context namespace (NOT NULL, Index)
+- key (VARCHAR): Unique key identifier within the namespace (NOT NULL)
+- value (JSON): Associated structured data (NOT NULL)
+- summary (VARCHAR): Short text description used for vector embedding (NOT NULL)
+- created_at (DATETIME): Record creation timestamp (NOT NULL)
+- updated_at (DATETIME): Record last updated timestamp (NOT NULL)
+* Unique Constraint: UniqueIndex on (namespace, key)
+
+------------------------------------------------------------
+personality.db -> people
+------------------------------------------------------------
+Stores structured user profiles and contact/relationship notes.
+- id (INTEGER): Primary Key, Autoincrement
+- name (VARCHAR): Unique name of the person (NOT NULL, Unique)
+- relationship (VARCHAR): Relationship type (NULLABLE)
+- age (INTEGER): Age of the person (NULLABLE)
+- birthday (VARCHAR): Birthday string (NULLABLE)
+- food_preferences (JSON): List of food preferences (NULLABLE)
+- hobbies (JSON): List of hobbies (NULLABLE)
+- personality_traits (JSON): List of traits (NULLABLE)
+- goals (JSON): List of goals (NULLABLE)
+- habits (JSON): List of habits (NULLABLE)
+- notes (VARCHAR): Additional notes on personality (NULLABLE)
+- created_at (DATETIME): Record creation timestamp (NOT NULL)
+- updated_at (DATETIME): Record last updated timestamp (NOT NULL)
 
 ============================================================
-PLANNED TABLES (Phase 2–3)
+VECTOR SCHEMA DETAILS (ChromaDB)
 ============================================================
-history.db:
-  conversations(id, date, summary, raw_turns, created_at)
+- mind_[namespace]: Collections mapped to Layer 3 mind records. Embedded using document=summary, metadata={namespace, key}.
+- personality: Collection mapped to Layer 4 profile notes. Embedded using document=consolidation_string, metadata={name}.
 
-mind.db:
-  inventory, pets, calendar_events, house, bills, tasks,
-  notes, file_index, daily_routines, shopping_lists
-
-personality.db:
-  people(id, name, relationship, age, birthday, food_preferences,
-         hobbies, personality_traits, goals, habits, notes,
-         created_at, updated_at)
