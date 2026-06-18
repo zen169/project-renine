@@ -3,6 +3,16 @@ RENINE — CHANGELOG
 ============================================================
 
 ============================================================
+2026-06-18 — Phase 5 Vision Integration
+============================================================
+- Implemented screenshot capture module using mss library with monitor geometry detection and automatic resizing.
+- Implemented OCR and visual question answering (VQA) using Qwen2.5-VL via local Ollama client integration.
+- Implemented OpenCV webcam capture with strict per-session user consent requirement to ensure privacy.
+- Created VisionAgent to orchestrate screen capture, OCR, image description, and webcam commands.
+- Configured settings.yaml, tools.yaml, and security.yaml to integrate vision permissions and privacy gates.
+- Added comprehensive unit testing suite, verifying 36/36 vision tests (bringing total tests to 224/224).
+
+============================================================
 2026-06-18 — Phase 4 Desktop Control & File Management [ignoring loop detection]
 ============================================================
 - Implemented AppLauncherTool with secure application whitelist execution via subprocess.

@@ -1,0 +1,109 @@
+============================================================
+RENINE — PHASE 5 REPORT (VISION INTEGRATION)
+============================================================
+Last Updated: 2026-06-18
+Version: 1.0.0
+
+============================================================
+EXECUTIVE SUMMARY
+============================================================
+Phase 5 introduced vision capabilities to Project Renine. She can now analyze screenshots, extract text via OCR, understand webcam feeds, and perform visual question answering. 
+
+Key architectural components include:
+1. `screenshot.py`: Multi-monitor screen capture using the `mss` library.
+2. `ocr.py`: OCR and Image Description/Visual Question Answering using Qwen2.5-VL via local Ollama integration.
+3. `webcam.py`: OpenCV-based camera frame capture with a strict per-session user consent privacy gate.
+4. `vision_agent.py`: Agent orchestration and routing for all vision operations.
+
+Security and privacy boundaries have been maintained:
+- Vision outputs are routed through the local-only `vision` namespace, preventing leakages.
+- Webcam activation enforces an explicit confirmation/consent gate per session; silent activation is completely blocked.
+- Screenshots are automatically scaled down if they exceed configured dimension limits.
+
+The test suite grew from 188 to 224 tests (36 new tests added), achieving a 100% pass rate.
+
+============================================================
+DELIVERABLES CHECKLIST
+============================================================
+[✓] Screen capture module using mss (renine/vision/screenshot.py)
+[✓] OCR and visual QA model pipeline using Ollama (renine/vision/ocr.py)
+[✓] OpenCV webcam management with consent checks (renine/vision/webcam.py)
+[✓] VisionAgent orchestrating screenshot, OCR, VQA (renine/agents/vision_agent.py)
+[✓] Integration configuration for vision and models (config/settings.yaml)
+[✓] Vision tools definition and permission mapping (config/tools.yaml)
+[✓] Local namespace and consent gate security rules (config/security.yaml)
+[✓] Router routing integration for visual intents (renine/brain/router.py)
+[✓] Vision exception hierarchy (renine/core/exceptions.py)
+[✓] Unit tests for screenshot, OCR, webcam, and VisionAgent (tests/vision/, tests/agents/test_vision_agent.py)
+
+============================================================
+ARCHITECTURE & DESIGN DECISIONS
+============================================================
+1. Quantized Multimodal Coexistence:
+   To fit both Qwen3 8B (Main Brain) and Qwen2.5-VL (Vision) within a 12GB VRAM budget, Qwen2.5-VL is run in a 4-bit quantized format (`qwen2.5vl:7b`) via local Ollama. This setup uses ~11GB VRAM, allowing concurrent inference without swapping, memory allocation errors, or OOM issues.
+
+2. Consent Gating for Camera Hardware:
+   The `WebcamManager` is designed with a stateful consent gate (`_consent_granted`). Any attempt to access the camera hardware before calling `grant_consent()` immediately throws a `WebcamConsentError`. Webcam access requires explicit, active consent per session (non-persistent).
+
+3. Local-only Vision Namespace:
+   In `security.yaml`, the `vision` namespace was added to `local_only_namespaces`. All visual inputs, OCR texts, and image descriptions are labeled with this namespace, ensuring they are scrubbed by the `ContextSanitizer` before any potential external API dispatch.
+
+4. Image Optimization and Resizing:
+   Screenshots are resized maintaining aspect ratio if their dimensions exceed the `max_dimension` parameter (default 1920px). This prevents token explosion or out-of-memory errors in the visual encoder of Qwen2.5-VL.
+
+============================================================
+TEST SUITE SUMMARY
+============================================================
+- Total Tests: 224 passing (36 new tests added)
+- New Coverage:
+  - tests/vision/test_screenshot.py: Monitor listing, screenshot capture, resizing rules, format checks.
+  - tests/vision/test_ocr.py: Base64 converter, file checks, OCR extraction, custom prompt VQA, error handling.
+  - tests/vision/test_webcam.py: Consent gating logic, camera open/close, frame read, context manager no-leak lifecycle.
+  - tests/agents/test_vision_agent.py: Routing, webcam permission checking, screenshot and OCR command processing.
+
+============================================================
+FILES CREATED
+============================================================
+- renine/vision/screenshot.py
+- renine/vision/ocr.py
+- renine/vision/webcam.py
+- renine/agents/vision_agent.py
+- tests/vision/__init__.py
+- tests/vision/test_screenshot.py
+- tests/vision/test_ocr.py
+- tests/vision/test_webcam.py
+- tests/agents/test_vision_agent.py
+- docs/phase_reports/phase_5_report.txt
+
+============================================================
+FILES MODIFIED
+============================================================
+- renine/core/exceptions.py
+- pyproject.toml
+- config/settings.yaml
+- config/tools.yaml
+- config/security.yaml
+- renine/vision/__init__.py
+- renine/agents/__init__.py
+- renine/brain/router.py
+- docs/changelog.txt
+- docs/features.txt
+- docs/code_map.txt
+- docs/folder_structure.txt
+- docs/project_state.txt
+- docs/models.txt
+- docs/session_handoff.txt
+
+============================================================
+KNOWN ISSUES
+============================================================
+- [TD-001] UI relies on simple HTML script bindings rather than modular React bundler. (Severity: Low)
+- [TD-002] Wake-word / Audio pipeline VAD integration is minimal. (Severity: Low)
+
+============================================================
+RECOMMENDATIONS FOR PHASE 6
+============================================================
+1. Web Agent Permissions:
+   Phase 6 Web Operations (Browser, Email, News) must implement standard security sandboxing. Web scripts and automation inputs must run with lower permissions or be validated against injection risks.
+2. Web Session Cookies:
+   Implement encryption or secure storage for browser session data if persistent logins are integrated.

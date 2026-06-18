@@ -2,9 +2,9 @@
 RENINE — PROJECT STATE
 ============================================================
 Last Updated: 2026-06-18
-Current Phase: 4 (Desktop Control & Local Files)
+Current Phase: 5 (Vision Integration)
 Phase Status: COMPLETE
-Version: 0.4.0
+Version: 0.5.0
 
 ============================================================
 PHASE HISTORY
@@ -37,11 +37,19 @@ Phase 4 — Desktop Control & Local Files: COMPLETE (2026-06-18) [ignoring loop 
   - FileAgent, CodingAgent, and SpreadsheetAgent implemented and integrated
   - Security boundaries strengthened with strict path traversal validation
 
+Phase 5 — Vision Integration: COMPLETE (2026-06-18)
+  - 224/224 tests passing (36/36 new tests)
+  - Screen capture tool implemented using mss
+  - OCR and image description (VQA) using Qwen2.5-VL via local Ollama
+  - Webcam capture with strict user consent gating implemented using OpenCV
+  - VisionAgent created to orchestrate all vision requests
+  - Strict privacy/security context sanitization of visual data verified
+
 ============================================================
 NEXT PHASE
 ============================================================
-Phase 5 — Vision Integration
-Prerequisites: Phase 4 complete ✅
+Phase 6 — Web Operations
+Prerequisites: Phase 5 complete ✅
 Status: Ready to begin
 
 ============================================================

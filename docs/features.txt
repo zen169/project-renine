@@ -70,10 +70,21 @@ PHASE 4 — IMPLEMENTED
 [x] Path traversal protection and allowed/blocked path validation
 
 ============================================================
-PHASE 5–9 — PLANNED
+PHASE 5 — IMPLEMENTED
 ============================================================
-[ ] Vision (OCR, screenshots, webcam)
-[ ] Browser, email, and news agents
+[x] Screen capture using mss (monitor geometry, bounding boxes, resizing)
+[x] OCR pipeline using Qwen2.5-VL via local Ollama integration
+[x] Visual Question Answering (VQA) / image description
+[x] OpenCV-based webcam capture with strict per-session user consent
+[x] VisionAgent routing for screenshot, OCR, VQA, and camera control
+[x] Context sanitization for vision outputs before external API transmission
+[x] Explicit consent gating for webcam activation (non-silent)
+
+============================================================
+PHASE 6–9 — PLANNED
+============================================================
+[ ] Browser, email, and news agents (Phase 6)
 [ ] Smart home integration
 [ ] Mobile companion
 [ ] Level 5 continuous learning
+

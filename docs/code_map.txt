@@ -82,6 +82,10 @@ renine/agents/spreadsheet_agent.py
   → Excel/CSV analysis helper (pandas computations + LLM analysis)
   → SpreadsheetAgent.process()
 
+renine/agents/vision_agent.py
+  → Vision agent (orchestrates screenshot, OCR, and webcam tasks)
+  → VisionAgent.process()
+
 ============================================================
 MEMORY
 ============================================================
@@ -147,6 +151,21 @@ renine/databases/models/house.py
 renine/databases/models/file_index.py
   → SQLAlchemy model for local files metadata index
   → FileIndex class
+
+============================================================
+VISION
+============================================================
+renine/vision/screenshot.py
+  → Captures monitor/desktop screenshots using mss
+  → capture(), list_monitors()
+
+renine/vision/ocr.py
+  → OCR & visual question answering using Qwen2.5-VL via Ollama
+  → extract_text(), describe_image()
+
+renine/vision/webcam.py
+  → Webcam capture with session-level consent verification
+  → WebcamManager class
 
 ============================================================
 VOICE

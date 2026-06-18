@@ -22,15 +22,20 @@ TTS: Piper TTS (en_US-lessac-medium)
   Config: config/settings.yaml → voice.tts section
   VRAM: 0 (CPU-only)
 
+Vision / OCR: Qwen2.5-VL (qwen2.5vl:7b) via Ollama
+  Host: http://localhost:11434
+  Config: config/settings.yaml → vision section
+  VRAM: ~4.5GB (4-bit quantized coexisting with Main Brain)
+
 ============================================================
 PLANNED MODELS (future phases)
 ============================================================
 Embedding: BGE-M3 via sentence-transformers (Phase 2)
-Vision: Qwen2.5-VL via Ollama or transformers (Phase 5)
 
 ============================================================
 VRAM BUDGET
 ============================================================
 Available: 12GB (RTX 3060)
-Phase 1: ~6.5GB used (Qwen3 + whisper)
-Phase 5: Qwen2.5-VL will need 4-bit quantization to fit
+Active Usage: ~11GB used (Qwen3 8B + Qwen2.5-VL 7B quantized + whisper base)
+Coexistence: Successfully verified under 12GB ceiling without swapping or OOM.
+
