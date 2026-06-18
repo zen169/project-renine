@@ -42,9 +42,21 @@ PHASE 2 — IMPLEMENTED
 [x] Memory agent (context injection for MainBrainAgent)
 
 ============================================================
-PHASE 3–9 — PLANNED
+PHASE 3 — IMPLEMENTED
 ============================================================
-[ ] Personal databases (inventory, pets, house)
+[x] Layer 3 Inventory schema, SQLAlchemy models and migrations
+[x] Layer 3 Pet profiles and feeding schedule models and migrations
+[x] Layer 3 House rooms/appliances/furniture models and migrations
+[x] InventoryAgent with CRUD, capabilities and "What can we cook?" logic
+[x] PetAgent with CRUD, medical tracking and automated feeding scheduler
+[x] HouseAgent with room appliance search and CRUD
+[x] Routing integration for specialized personal database agents
+[x] Electron IPC database action bridge (stdin python exec)
+[x] Electron UI panels for Inventory, Pets, and Family/Friends profiles
+
+============================================================
+PHASE 4–9 — PLANNED
+============================================================
 [ ] Desktop control and file agents
 [ ] Vision (OCR, screenshots, webcam)
 [ ] Browser, email, and news agents

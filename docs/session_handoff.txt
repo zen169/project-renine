@@ -3,39 +3,39 @@ RENINE — SESSION HANDOFF
 ============================================================
 Last Updated: 2026-06-18T00:54 PHT
 
-CURRENT_PHASE: 3
+CURRENT_PHASE: 4
 
-LAST_COMPLETED_TASK: PHASE 2 — MEMORY SYSTEM COMPLETE. All memory database schemas (SQLite + ChromaDB), expiration scheduling (APScheduler), embedding retrieval (BGE-M3), orchestrator interface (MemoryManager), specialized context injection agent (MemoryAgent), 157 passing tests, and updated documentation/reports have been fully delivered.
+LAST_COMPLETED_TASK: Phase 3 (Personal Databases) complete. Implemented database schemas for inventory, pets, and house tables (SQLite + migrations), specialized agents (InventoryAgent, PetAgent, HouseAgent), routing classification, background scheduler reminders, Electron IPC Python execution bridge, and frontend CRUD panels (tabs, lists, and forms).
 
-NEXT_TASK: PHASE 3 — PERSONAL DATABASES (Inventory, Pets, Calendar databases integration).
+NEXT_TASK: Phase 4 — Desktop Control & Local Files.
 
 KNOWN_ISSUES:
-  - TD-001: Electron UI inline JS (Low) — Phase 2/3 remediation
-  - TD-002: Audio pipeline VAD not full (Low) — Phase 2 remediation
-  - TD-003: Electron-Python IPC not connected (Medium) — Phase 2
+  - TD-001: Electron UI inline JS (Low) — Future remediation
+  - TD-002: Audio pipeline VAD not full (Low) — Future remediation
+  - TD-003: Electron-Python IPC (Resolved via stdin-spawning bridge)
   - No open bugs.
 
 RECENT_FILES_MODIFIED:
-  - renine/brain/ollama_client.py (split chat_stream, <50 lines fix)
-  - renine/core/events.py (logger kwarg conflict fix: event= → ev=)
-  - tests/core/test_events.py (new)
-  - tests/brain/test_router.py (new)
-  - tests/brain/test_response_builder.py (new)
-  - tests/agents/test_base_agent.py (new)
-  - tests/security/test_input_validator.py (new)
-  - tests/security/test_confirmation_gate.py (new)
-  - tests/tools/test_registry.py (new)
-  - tests/voice/test_wake_word.py (new)
-  - docs/folder_structure.txt (updated — new test files added)
-  - docs/bugs.txt (events.py bug logged and resolved)
-  - docs/changelog.txt (quality pass entry added)
-  - docs/technical_debt.txt (2 resolved items added)
+  - renine/databases/models/inventory.py (new)
+  - renine/databases/models/pets.py (new)
+  - renine/databases/models/house.py (new)
+  - renine/agents/inventory_agent.py (new)
+  - renine/agents/pet_agent.py (new)
+  - renine/agents/house_agent.py (new)
+  - tests/agents/test_inventory_agent.py (new)
+  - tests/agents/test_pet_agent.py (new)
+  - tests/agents/test_house_agent.py (new)
+  - renine/ui/electron/ipc_handlers.ts (updated)
+  - renine/ui/electron/preload.ts (updated)
+  - renine/ui/renderer/index.html (updated)
+  - renine/ui/renderer/styles/globals.css (updated)
+  - renine/ui/tsconfig.json (updated)
 
 DO_NOT:
-  - Do NOT start Phase 2 without user instruction
-  - Do NOT recreate Phase 1 files
+  - Do NOT start Phase 4 without user instruction
+  - Do NOT recreate Phase 1/2 files
   - Do NOT perform full repository scans
-  - Do NOT re-run Phase 1 quality checks (already passed)
+  - Do NOT re-run Phase 1/2 quality checks (already passed)
 
 ============================================================
 QUALITY VERIFICATION RESULTS (Phase 1)

@@ -58,6 +58,18 @@ renine/agents/memory_agent.py
   → Context retrieval agent
   → MemoryAgent.process()
 
+renine/agents/inventory_agent.py
+  → Inventory management agent (CRUD + recipe checks)
+  → InventoryAgent.process(), what_can_we_cook()
+
+renine/agents/pet_agent.py
+  → Pet profile agent (CRUD + feeding schedules + reminder setup)
+  → PetAgent.process(), add_pet(), sync_pet_reminders()
+
+renine/agents/house_agent.py
+  → Room, appliance, and furniture tracking agent
+  → HouseAgent.process(), query_house_status()
+
 ============================================================
 MEMORY
 ============================================================
@@ -107,6 +119,18 @@ renine/databases/models/mind.py
 renine/databases/models/personality.py
   → SQLAlchemy model for person profiles
   → Person class
+
+renine/databases/models/inventory.py
+  → SQLAlchemy model for household inventory
+  → InventoryItem class
+
+renine/databases/models/pets.py
+  → SQLAlchemy model for pet profiles
+  → Pet class
+
+renine/databases/models/house.py
+  → SQLAlchemy model for room items/appliances/furniture
+  → HouseItem class
 
 ============================================================
 VOICE

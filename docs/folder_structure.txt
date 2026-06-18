@@ -27,7 +27,10 @@ Renine/
 │   │   ├── __init__.py
 │   │   ├── base_agent.py
 │   │   ├── main_brain_agent.py
-│   │   └── memory_agent.py
+│   │   ├── memory_agent.py
+│   │   ├── inventory_agent.py
+│   │   ├── pet_agent.py
+│   │   └── house_agent.py
 │   ├── memory/
 │   │   ├── __init__.py
 │   │   ├── layer1_context.py
@@ -44,7 +47,10 @@ Renine/
 │   │   │   ├── __init__.py
 │   │   │   ├── conversation.py
 │   │   │   ├── mind.py
-│   │   │   └── personality.py
+│   │   │   ├── personality.py
+│   │   │   ├── inventory.py
+│   │   │   ├── pets.py
+│   │   │   └── house.py
 │   │   └── migrations/
 │   ├── tools/
 │   │   ├── __init__.py
@@ -129,7 +135,9 @@ Renine/
 │   │   ├── RENINE_MASTER_PROMPT_V1_0.md
 │   │   └── PROJECT PLAN V1.0.md
 │   └── phase_reports/
-│       └── phase_1_report.txt
+│       ├── phase_1_report.txt
+│       ├── phase_2_report.txt
+│       └── phase_3_report.txt
 │
 └── tests/
     ├── __init__.py
@@ -148,7 +156,10 @@ Renine/
     ├── agents/
     │   ├── __init__.py
     │   ├── test_base_agent.py
-    │   └── test_memory_agent.py
+    │   ├── test_memory_agent.py
+    │   ├── test_inventory_agent.py
+    │   ├── test_pet_agent.py
+    │   └── test_house_agent.py
     ├── memory/
     │   ├── __init__.py
     │   ├── test_expiration.py

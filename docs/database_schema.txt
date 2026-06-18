@@ -42,6 +42,52 @@ Stores key-value configurations and facts classified by namespaces.
 * Unique Constraint: UniqueIndex on (namespace, key)
 
 ------------------------------------------------------------
+mind.db -> inventory
+------------------------------------------------------------
+Stores items in the household inventory (food, ingredients, supplies).
+- id (INTEGER): Primary Key, Autoincrement
+- name (VARCHAR): Name of the item (NOT NULL, Unique Index)
+- category (VARCHAR): Category (food/ingredient/supply) (NOT NULL, Index)
+- quantity (FLOAT): Current quantity in stock (NOT NULL)
+- unit (VARCHAR): Unit of measure (NOT NULL)
+- threshold (FLOAT): Minimum quantity threshold for alerts/shopping (NOT NULL)
+- location (VARCHAR): Where it is stored (NOT NULL)
+- expiration_date (DATETIME): Expiration timestamp (NULLABLE)
+- created_at (DATETIME): Record creation timestamp (NOT NULL)
+- updated_at (DATETIME): Record last updated timestamp (NOT NULL)
+
+------------------------------------------------------------
+mind.db -> pets
+------------------------------------------------------------
+Stores pet profiles and schedules.
+- id (INTEGER): Primary Key, Autoincrement
+- name (VARCHAR): Name of the pet (NOT NULL, Unique Index)
+- species (VARCHAR): Species (dog/cat/etc) (NOT NULL)
+- breed (VARCHAR): Breed (NULLABLE)
+- age (FLOAT): Age in years (NULLABLE)
+- birthday (VARCHAR): Birthday string (NULLABLE)
+- weight (FLOAT): Weight in kg (NULLABLE)
+- feeding_schedule (JSON): Scheduled feeding times (NOT NULL)
+- medical_conditions (JSON): List of medical conditions (NOT NULL)
+- medications (JSON): List of active medications and schedules (NOT NULL)
+- last_fed (DATETIME): Timestamp when last fed (NULLABLE)
+- created_at (DATETIME): Record creation timestamp (NOT NULL)
+- updated_at (DATETIME): Record last updated timestamp (NOT NULL)
+
+------------------------------------------------------------
+mind.db -> house
+------------------------------------------------------------
+Stores rooms, appliances, and furniture tracking details.
+- id (INTEGER): Primary Key, Autoincrement
+- name (VARCHAR): Name or description of the item (NOT NULL, Unique Index)
+- item_type (VARCHAR): Type of item (room/appliance/furniture) (NOT NULL, Index)
+- room (VARCHAR): Room where item is located (NOT NULL, Index)
+- status (VARCHAR): Status (functional/maintenance/broken) (NOT NULL)
+- details (JSON): Custom metadata dict (brand, purchase date, etc.) (NOT NULL)
+- created_at (DATETIME): Record creation timestamp (NOT NULL)
+- updated_at (DATETIME): Record last updated timestamp (NOT NULL)
+
+------------------------------------------------------------
 personality.db -> people
 ------------------------------------------------------------
 Stores structured user profiles and contact/relationship notes.
