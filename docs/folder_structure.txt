@@ -137,10 +137,17 @@ Renine/
     │   └── test_response_builder.py
     ├── agents/
     │   ├── __init__.py
-    │   └── test_base_agent.py
+    │   ├── test_base_agent.py
+    │   └── test_memory_agent.py
     ├── memory/
     │   ├── __init__.py
-    │   └── test_layer1_context.py
+    │   ├── test_expiration.py
+    │   ├── test_layer1_context.py
+    │   ├── test_layer2_history.py
+    │   ├── test_layer3_mind.py
+    │   ├── test_layer4_personality.py
+    │   ├── test_memory_manager.py
+    │   └── test_retrieval.py
     ├── tools/
     │   ├── __init__.py
     │   └── test_registry.py
