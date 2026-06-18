@@ -22,6 +22,7 @@ import io
 from pathlib import Path
 from typing import Any
 
+import ollama as ollama_lib
 from PIL import Image
 
 from renine.core.config import get_settings
@@ -153,8 +154,6 @@ def _call_vision_model(
     Raises:
         OCRError: If the model call fails.
     """
-    import ollama as ollama_lib
-
     vision_config = _get_vision_config()
     target_model = model or vision_config.get("model", "qwen2.5vl:7b")
 
