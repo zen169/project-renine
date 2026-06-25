@@ -5,6 +5,7 @@ and natural language query capability backed by Ollama.
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +18,12 @@ from renine.security.input_validator import validate_path
 from renine.tools.permissions import PermissionLevel
 
 logger = get_logger(__name__)
+
+_SPREADSHEET_EXTENSIONS = (".csv", ".xlsx", ".xls")
+_WINDOWS_PATH_PATTERN = re.compile(
+    r"(?P<path>[A-Za-z]:[^\r\n]*?\.(?:csv|xlsx|xls))",
+    re.IGNORECASE,
+)
 
 
 def _load_data_frame(path: Path) -> pd.DataFrame:
@@ -95,6 +102,27 @@ def _query_llm_about_data(user_query: str, df: pd.DataFrame) -> str:
         return f"Error communicating with local AI model: {e}"
 
 
+def _extract_spreadsheet_path(user_input: str) -> str:
+    """Extract a spreadsheet path, including Windows paths that contain spaces."""
+    quoted_match = re.search(
+        r"[\"'](?P<path>[^\"']+\.(?:csv|xlsx|xls))[\"']",
+        user_input,
+        re.IGNORECASE,
+    )
+    if quoted_match:
+        return quoted_match.group("path")
+
+    windows_match = _WINDOWS_PATH_PATTERN.search(user_input)
+    if windows_match:
+        return windows_match.group("path").strip(".,'\"?!=:;()[]{}")
+
+    for word in user_input.split():
+        word_clean = word.strip(".,'\"?!=:;()[]{}")
+        if "/" in word_clean or "\\" in word_clean or word_clean.endswith(_SPREADSHEET_EXTENSIONS):
+            return word_clean
+    return ""
+
+
 class SpreadsheetAgent(BaseAgent):
     """Agent that handles CSV and Excel analysis."""
 
@@ -126,14 +154,7 @@ class SpreadsheetAgent(BaseAgent):
             Result dictionary.
         """
         query = user_input.lower().strip()
-        file_path_str = ""
-
-        # Extract file path
-        for word in user_input.split():
-            word_clean = word.strip(".,'\"?!=:;()[]{}")
-            if "/" in word_clean or "\\" in word_clean or word_clean.endswith((".csv", ".xlsx", ".xls")):
-                file_path_str = word_clean
-                break
+        file_path_str = _extract_spreadsheet_path(user_input)
 
         if not file_path_str:
             return {

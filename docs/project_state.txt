@@ -1,27 +1,27 @@
+﻿============================================================
+RENINE - PROJECT STATE
 ============================================================
-RENINE — PROJECT STATE
-============================================================
-Last Updated: 2026-06-18
-Current Phase: 5 (Vision Integration)
+Last Updated: 2026-06-25
+Current Phase: 6 (Web Operations)
 Phase Status: COMPLETE
-Version: 0.5.0
+Version: 0.6.0
 
 ============================================================
 PHASE HISTORY
 ============================================================
-Phase 1 — MVP Foundation: COMPLETE (2026-06-18)
+Phase 1 - MVP Foundation: COMPLETE (2026-06-18)
   - 133/133 tests passing
   - All 8 quality rules verified
   - All deliverables implemented
 
-Phase 2 — Memory System: COMPLETE (2026-06-18)
+Phase 2 - Memory System: COMPLETE (2026-06-18)
   - 157/157 tests passing
   - SQLite + ChromaDB persistence layers (2, 3, 4) implemented
   - BGE-M3 semantic search retrieval model integrated
   - Expiration daemon and MemoryManager unified interface built
   - Context injection in MainBrainAgent via MemoryAgent verified
 
-Phase 3 — Personal Databases: COMPLETE (2026-06-18)
+Phase 3 - Personal Databases: COMPLETE (2026-06-18)
   - 168/168 tests passing
   - Personal schemas (inventory, pets, house) integrated with SQLAlchemy/Alembic
   - Specialized agents (InventoryAgent, PetAgent, HouseAgent) built and registered
@@ -29,7 +29,7 @@ Phase 3 — Personal Databases: COMPLETE (2026-06-18)
   - APScheduler-based pet feeding reminder events verified
   - Electron UI tab switcher, data listing, and CRUD forms integrated via Python stdin-spawn bridge
 
-Phase 4 — Desktop Control & Local Files: COMPLETE (2026-06-18) [ignoring loop detection]
+Phase 4 - Desktop Control & Local Files: COMPLETE (2026-06-18) [ignoring loop detection]
   - 188/188 tests passing
   - Secure application launcher, volume control, and clipboard tools implemented
   - Text, PDF, and DOCX secure file reader tools with size boundaries built
@@ -37,7 +37,7 @@ Phase 4 — Desktop Control & Local Files: COMPLETE (2026-06-18) [ignoring loop 
   - FileAgent, CodingAgent, and SpreadsheetAgent implemented and integrated
   - Security boundaries strengthened with strict path traversal validation
 
-Phase 5 — Vision Integration: COMPLETE (2026-06-18)
+Phase 5 - Vision Integration: COMPLETE (2026-06-18)
   - 224/224 tests passing (36/36 new tests)
   - Screen capture tool implemented using mss
   - OCR and image description (VQA) using Qwen2.5-VL via local Ollama
@@ -45,12 +45,22 @@ Phase 5 — Vision Integration: COMPLETE (2026-06-18)
   - VisionAgent created to orchestrate all vision requests
   - Strict privacy/security context sanitization of visual data verified
 
+Phase 6 - Web Operations: COMPLETE (2026-06-25)
+  - 256/256 tests passing
+  - External LLM client implemented with ContextSanitizer enforcement and local fallback
+  - BrowserTool implemented with Playwright isolated temporary profiles and verified cleanup
+  - BrowserAgent implemented with UNTRUSTED content marking and Layer 3/4 memory denial
+  - EmailAgent implemented with gmail.readonly default scope, opt-in draft creation, and blocked send
+  - NewsAgent implemented for RSS feed headlines and local summarization
+  - Electron IPC dispatch integrated for BrowserAgent, EmailAgent, and NewsAgent
+  - Phase 6 dependencies declared and documentation synchronized
+
 ============================================================
 NEXT PHASE
 ============================================================
-Phase 6 — Web Operations
-Prerequisites: Phase 5 complete ✅
-Status: Ready to begin
+Phase 7 - Smart Home Integration
+Prerequisites: Phase 6 complete
+Status: Not started
 
 ============================================================
 ACTIVE ISSUES
@@ -60,9 +70,7 @@ None.
 ============================================================
 NOTES
 ============================================================
-- Phase 1 fully validated via Prompt 4 protocol (2026-06-18).
-- Electron UI is Phase 1 shell (echo mode). Python backend
-  integration will be added in Phase 2.
-- Piper TTS and faster-whisper require model downloads before
-  first use (see models/README.md).
-- Ollama must be running with qwen3:8b pulled before use.
+- Phase 6 is complete and compliant with the original Phase 6 security requirements.
+- Do not begin Phase 7 without explicit user instruction.
+- Ollama must be running with qwen3:8b pulled before local LLM use.
+- Playwright browser binaries may need installation in a fresh environment before live browser automation.

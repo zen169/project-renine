@@ -8,7 +8,7 @@
 # --- Application ---
 app:
   name: "Renine"
-  version: "0.1.0"
+  version: "0.6.0"
   debug: false
 
 # --- Ollama ---
@@ -79,10 +79,14 @@ vision:
 models:
   base_dir: "models"
 
+# --- Email ---
+email:
+  allow_draft_creation: false
+
 # --- Feature Flags ---
 features:
   voice_enabled: true
   external_llm_fallback: false
   vision_enabled: true
-  browser_agent_enabled: false
+  browser_agent_enabled: true
   smart_home_enabled: false

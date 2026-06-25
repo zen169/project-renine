@@ -67,6 +67,9 @@ from renine.agents.main_brain_agent import MainBrainAgent
 from renine.agents.inventory_agent import InventoryAgent
 from renine.agents.pet_agent import PetAgent
 from renine.agents.house_agent import HouseAgent
+from renine.agents.browser_agent import BrowserAgent
+from renine.agents.email_agent import EmailAgent
+from renine.agents.news_agent import NewsAgent
 
 user_input = ${JSON.stringify(data.text)}
 decision = route(user_input)
@@ -77,6 +80,12 @@ elif decision.target == RouteTarget.PET_AGENT:
     agent = PetAgent()
 elif decision.target == RouteTarget.HOUSE_AGENT:
     agent = HouseAgent()
+elif decision.target == RouteTarget.BROWSER_AGENT:
+    agent = BrowserAgent()
+elif decision.target == RouteTarget.EMAIL_AGENT:
+    agent = EmailAgent()
+elif decision.target == RouteTarget.NEWS_AGENT:
+    agent = NewsAgent()
 else:
     agent = MainBrainAgent()
 
@@ -119,8 +128,8 @@ print(json.dumps(res))
     ipcMain.handle('renine:request-status', async () => {
         return {
             status: 'online',
-            phase: 3,
-            version: '0.3.0',
+            phase: 6,
+            version: '0.6.0',
         };
     });
 

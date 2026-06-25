@@ -37,3 +37,19 @@ class TestRoute:
         ctx = [{"role": "user", "content": "hi"}]
         decision = route("Continue", context=ctx)
         assert decision.target == RouteTarget.MAIN_BRAIN
+
+    def test_routes_to_email_agent(self) -> None:
+        """Keywords related to email route to the email agent."""
+        decision = route("check my gmail inbox")
+        assert decision.target == RouteTarget.EMAIL_AGENT
+
+    def test_routes_to_news_agent(self) -> None:
+        """Keywords related to news headlines route to the news agent."""
+        decision = route("show tech news headlines")
+        assert decision.target == RouteTarget.NEWS_AGENT
+
+    def test_routes_to_browser_agent(self) -> None:
+        """Keywords related to web browsing route to the browser agent."""
+        decision = route("google standard time zone info")
+        assert decision.target == RouteTarget.BROWSER_AGENT
+

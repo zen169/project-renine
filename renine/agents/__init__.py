@@ -10,6 +10,9 @@ from renine.agents.file_agent import FileAgent
 from renine.agents.coding_agent import CodingAgent
 from renine.agents.spreadsheet_agent import SpreadsheetAgent
 from renine.agents.vision_agent import VisionAgent
+from renine.agents.browser_agent import BrowserAgent
+from renine.agents.email_agent import EmailAgent
+from renine.agents.news_agent import NewsAgent
 
 __all__ = [
     "MainBrainAgent",
@@ -21,5 +24,8 @@ __all__ = [
     "CodingAgent",
     "SpreadsheetAgent",
     "VisionAgent",
+    "BrowserAgent",
+    "EmailAgent",
+    "NewsAgent",
 ]
 

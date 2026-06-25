@@ -1,61 +1,73 @@
+﻿============================================================
+RENINE - SESSION HANDOFF
 ============================================================
-RENINE — SESSION HANDOFF
-============================================================
-Last Updated: 2026-06-18
+Last Updated: 2026-06-25
 
 CURRENT_PHASE: 6
 
-LAST_COMPLETED_TASK: Phase 5 (Vision Integration) complete. Implemented screen capture (mss), OCR & visual description (Qwen2.5-VL via local Ollama), OpenCV webcam capture with per-session consent privacy gating, and VisionAgent router/orchestrator. Added 36 new tests (all 224/224 passing).
+LAST_COMPLETED_TASK: Phase 6 (Web Operations) complete. Implemented BrowserAgent, EmailAgent, NewsAgent, BrowserTool, and external_client. Hardened Gmail OAuth defaults, browser profile cleanup, browser UNTRUSTED content boundaries, Layer 3/4 memory denial tests, dependency declarations, and Electron IPC dispatch. Full suite verified: 256/256 tests passing.
 
-NEXT_TASK: Phase 6 — Web Operations (Browser, Email, and News Agents).
+NEXT_TASK: Await user instruction. Do NOT start Phase 7 unless explicitly requested.
 
 KNOWN_ISSUES:
-  - TD-001: Electron UI inline JS (Low) — Future remediation
-  - TD-002: Audio pipeline VAD not full (Low) — Future remediation
-  - No open bugs.
+  - TD-001: Electron UI inline JS (Low) - Future remediation
+  - TD-002: Audio pipeline VAD not full (Low) - Future remediation
+  - No open Phase 6 bugs.
 
 RECENT_FILES_MODIFIED:
-  - renine/vision/screenshot.py (new)
-  - renine/vision/ocr.py (new)
-  - renine/vision/webcam.py (new)
-  - renine/agents/vision_agent.py (new)
-  - tests/vision/test_screenshot.py (new)
-  - tests/vision/test_ocr.py (new)
-  - tests/vision/test_webcam.py (new)
-  - tests/agents/test_vision_agent.py (new)
-  - renine/vision/__init__.py (updated)
+  - renine/brain/external_client.py (new)
+  - renine/tools/web/browser_tool.py (new)
+  - renine/agents/browser_agent.py (new)
+  - renine/agents/email_agent.py (new)
+  - renine/agents/news_agent.py (new)
+  - renine/agents/spreadsheet_agent.py (updated path extraction for paths with spaces)
   - renine/agents/__init__.py (updated)
   - renine/brain/router.py (updated)
-  - renine/core/exceptions.py (updated)
-  - pyproject.toml (updated)
-  - config/settings.yaml (updated)
-  - config/tools.yaml (updated)
-  - config/security.yaml (updated)
+  - renine/tools/__init__.py (updated)
+  - renine/tools/web/__init__.py (updated)
+  - renine/ui/electron/ipc_handlers.ts (updated Phase 6 dispatch/status)
+  - config/settings.yaml (updated version/email config)
+  - config/tools.yaml (updated browser tool config)
+  - pyproject.toml (updated version/dependencies)
+  - tests/brain/test_external_client.py (new)
+  - tests/tools/test_browser_tool.py (new)
+  - tests/agents/test_browser_agent.py (new)
+  - tests/agents/test_email_agent.py (new)
+  - tests/agents/test_news_agent.py (new)
+  - tests/brain/test_router.py (updated)
+  - tests/ui/test_ipc_phase6_dispatch.py (new)
+  - docs/changelog.txt (updated)
+  - docs/features.txt (updated)
+  - docs/code_map.txt (updated)
+  - docs/folder_structure.txt (updated)
+  - docs/project_state.txt (updated)
+  - docs/session_handoff.txt (updated)
+  - docs/phase_reports/phase_6_report.txt (new)
 
 DO_NOT:
-  - Do NOT start Phase 6 without user instruction
-  - Do NOT recreate existing Phase 1/2/3/4/5 files
-  - Do NOT perform full repository scans
-  - Do NOT re-run Phase 1/2/3/4 quality checks (already passed)
-
+  - Do NOT start Phase 7 without explicit user instruction
+  - Do NOT recreate existing Phase 1/2/3/4/5/6 files
+  - Do NOT perform unrelated refactors
 
 ============================================================
-QUALITY VERIFICATION RESULTS (Phase 1)
+QUALITY VERIFICATION RESULTS (Phase 6)
 ============================================================
-[✓] All functions have type hints and docstrings
-[✓] No function exceeds 50 lines (chat_stream fixed)
-[✓] No hardcoded values — all config from YAML files
-[✓] No print() statements — all use logger
-[✓] ContextSanitizer called on all external API paths
-[✓] Confirmation gate called on all destructive operations
-[✓] Tests exist for every module (133 tests, all passing)
-[✓] Documentation synchronized
+[OK] ContextSanitizer called on external LLM path
+[OK] Browser content marked UNTRUSTED
+[OK] BrowserAgent denied Layer 3 and Layer 4 memory access
+[OK] Gmail send disabled and blocked
+[OK] Gmail default scope is readonly only
+[OK] Gmail compose scope requires explicit configuration
+[OK] Playwright uses isolated temporary profiles
+[OK] Browser profile cleanup is verified
+[OK] No storage export APIs are used
+[OK] Electron IPC dispatch includes BrowserAgent, EmailAgent, and NewsAgent
+[OK] Full test suite passing: 256/256
 
 ============================================================
 SESSION PROTOCOL REMINDER
 ============================================================
-This project is documentation-driven.
 1. Read session_handoff.txt + key docs at session start.
-2. Work only on NEXT_TASK.
+2. Work only on the user-approved phase/task.
 3. Update session_handoff.txt after every major task.
 4. Trust documentation over conversation history.

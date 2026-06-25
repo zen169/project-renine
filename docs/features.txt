@@ -1,10 +1,10 @@
+﻿============================================================
+RENINE â€” FEATURES TRACKER
 ============================================================
-RENINE — FEATURES TRACKER
-============================================================
-Last Updated: 2026-06-18
+Last Updated: 2026-06-25
 
 ============================================================
-PHASE 1 — IMPLEMENTED
+PHASE 1 â€” IMPLEMENTED
 ============================================================
 [x] YAML config loader with env var interpolation
 [x] Centralized structlog logging with daily rotation
@@ -12,7 +12,7 @@ PHASE 1 — IMPLEMENTED
 [x] Internal event bus (pub/sub)
 [x] Context sanitizer for external API payloads
 [x] Ollama client (sync + async streaming)
-[x] Input router (default → MainBrainAgent)
+[x] Input router (default â†’ MainBrainAgent)
 [x] Response builder (text, error, confirmation, tool result)
 [x] Base agent abstract class with manifests
 [x] Main brain agent (conversation via Qwen3 8B)
@@ -20,7 +20,7 @@ PHASE 1 — IMPLEMENTED
 [x] Wake word detection ("Renine")
 [x] STT via faster-whisper
 [x] TTS via Piper
-[x] Audio pipeline (mic→STT→brain→TTS)
+[x] Audio pipeline (micâ†’STTâ†’brainâ†’TTS)
 [x] Input validator (text, path, shell)
 [x] Confirmation gate for destructive actions
 [x] Fernet encryption for sensitive fields
@@ -30,7 +30,7 @@ PHASE 1 — IMPLEMENTED
 [x] Electron UI shell (chat window, voice indicator)
 
 ============================================================
-PHASE 2 — IMPLEMENTED
+PHASE 2 â€” IMPLEMENTED
 ============================================================
 [x] Layer 2 conversation history (SQLite, 48h TTL)
 [x] Layer 3 mind database (SQLite + ChromaDB)
@@ -42,7 +42,7 @@ PHASE 2 — IMPLEMENTED
 [x] Memory agent (context injection for MainBrainAgent)
 
 ============================================================
-PHASE 3 — IMPLEMENTED
+PHASE 3 â€” IMPLEMENTED
 ============================================================
 [x] Layer 3 Inventory schema, SQLAlchemy models and migrations
 [x] Layer 3 Pet profiles and feeding schedule models and migrations
@@ -55,7 +55,7 @@ PHASE 3 — IMPLEMENTED
 [x] Electron UI panels for Inventory, Pets, and Family/Friends profiles
 
 ============================================================
-PHASE 4 — IMPLEMENTED
+PHASE 4 â€” IMPLEMENTED
 ============================================================
 [x] App Launcher with secure, whitelist-based configuration
 [x] Windows Volume Control (via PowerShell with inline C# COM API)
@@ -70,7 +70,7 @@ PHASE 4 — IMPLEMENTED
 [x] Path traversal protection and allowed/blocked path validation
 
 ============================================================
-PHASE 5 — IMPLEMENTED
+PHASE 5 â€” IMPLEMENTED
 ============================================================
 [x] Screen capture using mss (monitor geometry, bounding boxes, resizing)
 [x] OCR pipeline using Qwen2.5-VL via local Ollama integration
@@ -81,9 +81,23 @@ PHASE 5 — IMPLEMENTED
 [x] Explicit consent gating for webcam activation (non-silent)
 
 ============================================================
-PHASE 6–9 — PLANNED
+PHASE 6 - IMPLEMENTED
 ============================================================
-[ ] Browser, email, and news agents (Phase 6)
+[x] External LLM client with ContextSanitizer enforcement and local Ollama fallback
+[x] BrowserTool using Playwright with isolated temporary profiles
+[x] Browser content marked UNTRUSTED and blocked from Layer 3/4 memory access
+[x] Browser profile cleanup verification with no persistent cookies or storage export
+[x] BrowserAgent for web research, shopping, and form/navigation tasks
+[x] EmailAgent for Gmail readonly inbox access by default
+[x] Gmail draft creation gated behind explicit configuration
+[x] Gmail send disabled by default and blocked by policy
+[x] NewsAgent for RSS headline retrieval and local summarization
+[x] Router and Electron IPC dispatch integration for BrowserAgent, EmailAgent, and NewsAgent
+[x] Phase 6 dependency declarations and security-focused tests
+
+============================================================
+PHASE 7-9 - PLANNED
+============================================================
 [ ] Smart home integration
 [ ] Mobile companion
 [ ] Level 5 continuous learning

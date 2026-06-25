@@ -1,240 +1,260 @@
+﻿============================================================
+RENINE â€” CODE MAP
 ============================================================
-RENINE — CODE MAP
-============================================================
-Last Updated: 2026-06-18
+Last Updated: 2026-06-25
 
-Each entry: file path → purpose → key classes/functions
+Each entry: file path â†’ purpose â†’ key classes/functions
 
 ============================================================
 CORE
 ============================================================
 renine/core/config.py
-  → YAML config loader with ${ENV:-default} interpolation
-  → load_yaml(), get_settings(), get_project_root()
+  â†’ YAML config loader with ${ENV:-default} interpolation
+  â†’ load_yaml(), get_settings(), get_project_root()
 
 renine/core/logging_config.py
-  → Centralized structlog setup with file rotation
-  → configure_logging(), get_logger()
+  â†’ Centralized structlog setup with file rotation
+  â†’ configure_logging(), get_logger()
 
 renine/core/exceptions.py
-  → Complete exception hierarchy
-  → RenineError (base), BrainError, ToolError, VoiceError, etc.
+  â†’ Complete exception hierarchy
+  â†’ RenineError (base), BrainError, ToolError, VoiceError, etc.
 
 renine/core/events.py
-  → Synchronous pub/sub event bus
-  → EventBus class, event_bus singleton
+  â†’ Synchronous pub/sub event bus
+  â†’ EventBus class, event_bus singleton
 
 renine/core/context_sanitizer.py
-  → Strips sensitive data before external API calls
-  → sanitize(), check_namespace()
+  â†’ Strips sensitive data before external API calls
+  â†’ sanitize(), check_namespace()
 
 ============================================================
 BRAIN
 ============================================================
 renine/brain/ollama_client.py
-  → Qwen3 8B interface via Ollama
-  → chat(), chat_stream(), check_connection()
+  â†’ Qwen3 8B interface via Ollama
+  â†’ chat(), chat_stream(), check_connection()
+
+renine/brain/external_client.py
+  -> Sanitized external LLM fallback client using Anthropic API and local Ollama fallback
+  -> generate_external_response()
 
 renine/brain/router.py
-  → Routes user input to appropriate agent
-  → route() → RouteDecision, RouteTarget enum
+  â†’ Routes user input to appropriate agent
+  â†’ route() â†’ RouteDecision, RouteTarget enum
 
 renine/brain/response_builder.py
-  → Assembles structured response objects
-  → build_text_response(), build_error_response(), RenineResponse
+  â†’ Assembles structured response objects
+  â†’ build_text_response(), build_error_response(), RenineResponse
 
 ============================================================
 AGENTS
 ============================================================
 renine/agents/base_agent.py
-  → Abstract base for all agents
-  → BaseAgent (ABC), AgentManifest, MemoryAccessLevel
+  â†’ Abstract base for all agents
+  â†’ BaseAgent (ABC), AgentManifest, MemoryAccessLevel
 
 renine/agents/main_brain_agent.py
-  → Primary conversation agent
-  → MainBrainAgent.process()
+  â†’ Primary conversation agent
+  â†’ MainBrainAgent.process()
 
 renine/agents/memory_agent.py
-  → Context retrieval agent
-  → MemoryAgent.process()
+  â†’ Context retrieval agent
+  â†’ MemoryAgent.process()
 
 renine/agents/inventory_agent.py
-  → Inventory management agent (CRUD + recipe checks)
-  → InventoryAgent.process(), what_can_we_cook()
+  â†’ Inventory management agent (CRUD + recipe checks)
+  â†’ InventoryAgent.process(), what_can_we_cook()
 
 renine/agents/pet_agent.py
-  → Pet profile agent (CRUD + feeding schedules + reminder setup)
-  → PetAgent.process(), add_pet(), sync_pet_reminders()
+  â†’ Pet profile agent (CRUD + feeding schedules + reminder setup)
+  â†’ PetAgent.process(), add_pet(), sync_pet_reminders()
 
 renine/agents/house_agent.py
-  → Room, appliance, and furniture tracking agent
-  → HouseAgent.process(), query_house_status()
+  â†’ Room, appliance, and furniture tracking agent
+  â†’ HouseAgent.process(), query_house_status()
 
 renine/agents/file_agent.py
-  → File management agent (indexing + DB lookup + reading)
-  → FileAgent.process(), index_allowed_directories()
+  â†’ File management agent (indexing + DB lookup + reading)
+  â†’ FileAgent.process(), index_allowed_directories()
 
 renine/agents/coding_agent.py
-  → Programming assistant (explains, generates, and debugs code)
-  → CodingAgent.process()
+  â†’ Programming assistant (explains, generates, and debugs code)
+  â†’ CodingAgent.process()
 
 renine/agents/spreadsheet_agent.py
-  → Excel/CSV analysis helper (pandas computations + LLM analysis)
-  → SpreadsheetAgent.process()
+  â†’ Excel/CSV analysis helper (pandas computations + LLM analysis)
+  â†’ SpreadsheetAgent.process()
 
 renine/agents/vision_agent.py
-  → Vision agent (orchestrates screenshot, OCR, and webcam tasks)
-  → VisionAgent.process()
+  â†’ Vision agent (orchestrates screenshot, OCR, and webcam tasks)
+  â†’ VisionAgent.process()
+
+renine/agents/browser_agent.py
+  -> Browser/web operations agent with UNTRUSTED content boundary
+  -> BrowserAgent.process()
+
+renine/agents/email_agent.py
+  -> Gmail readonly inbox and explicitly gated draft creation agent
+  -> EmailAgent.process()
+
+renine/agents/news_agent.py
+  -> RSS news headline retrieval and summarization agent
+  -> NewsAgent.process()
 
 ============================================================
 MEMORY
 ============================================================
 renine/memory/layer1_context.py
-  → In-memory conversation context (rolling window)
-  → ConversationContext, Message
+  â†’ In-memory conversation context (rolling window)
+  â†’ ConversationContext, Message
 
 renine/memory/layer2_history.py
-  → Conversation history (SQLite with 48h TTL)
-  → store_conversation(), get_recent_conversations()
+  â†’ Conversation history (SQLite with 48h TTL)
+  â†’ store_conversation(), get_recent_conversations()
 
 renine/memory/layer3_mind.py
-  → Mind database (SQLite + ChromaDB namespace facts)
-  → store_fact(), get_fact(), search_facts()
+  â†’ Mind database (SQLite + ChromaDB namespace facts)
+  â†’ store_fact(), get_fact(), search_facts()
 
 renine/memory/layer4_personality.py
-  → Personality database (SQLite + ChromaDB profile lookup)
-  → store_person(), get_person(), search_people()
+  â†’ Personality database (SQLite + ChromaDB profile lookup)
+  â†’ store_person(), get_person(), search_people()
 
 renine/memory/expiration.py
-  → Expiration cleanup scheduling for Layer 2 history
-  → start_expiration_scheduler(), stop_expiration_scheduler()
+  â†’ Expiration cleanup scheduling for Layer 2 history
+  â†’ start_expiration_scheduler(), stop_expiration_scheduler()
 
 renine/memory/retrieval.py
-  → Semantic vector search using BGE-M3
-  → search_vector_store(), add_to_vector_store()
+  â†’ Semantic vector search using BGE-M3
+  â†’ search_vector_store(), add_to_vector_store()
 
 renine/memory/memory_manager.py
-  → Unified orchestrator for all memory layers
-  → MemoryManager class
+  â†’ Unified orchestrator for all memory layers
+  â†’ MemoryManager class
 
 ============================================================
 DATABASES
 ============================================================
 renine/databases/session.py
-  → SQLite engine and session factory setup
-  → get_engine(), get_sessionmaker(), get_session()
+  â†’ SQLite engine and session factory setup
+  â†’ get_engine(), get_sessionmaker(), get_session()
 
 renine/databases/models/conversation.py
-  → SQLAlchemy model for conversation history
-  → Conversation class
+  â†’ SQLAlchemy model for conversation history
+  â†’ Conversation class
 
 renine/databases/models/mind.py
-  → SQLAlchemy model for namespace facts
-  → MindRecord class
+  â†’ SQLAlchemy model for namespace facts
+  â†’ MindRecord class
 
 renine/databases/models/personality.py
-  → SQLAlchemy model for person profiles
-  → Person class
+  â†’ SQLAlchemy model for person profiles
+  â†’ Person class
 
 renine/databases/models/inventory.py
-  → SQLAlchemy model for household inventory
-  → InventoryItem class
+  â†’ SQLAlchemy model for household inventory
+  â†’ InventoryItem class
 
 renine/databases/models/pets.py
-  → SQLAlchemy model for pet profiles
-  → Pet class
+  â†’ SQLAlchemy model for pet profiles
+  â†’ Pet class
 
 renine/databases/models/house.py
-  → SQLAlchemy model for room items/appliances/furniture
-  → HouseItem class
+  â†’ SQLAlchemy model for room items/appliances/furniture
+  â†’ HouseItem class
 
 renine/databases/models/file_index.py
-  → SQLAlchemy model for local files metadata index
-  → FileIndex class
+  â†’ SQLAlchemy model for local files metadata index
+  â†’ FileIndex class
 
 ============================================================
 VISION
 ============================================================
 renine/vision/screenshot.py
-  → Captures monitor/desktop screenshots using mss
-  → capture(), list_monitors()
+  â†’ Captures monitor/desktop screenshots using mss
+  â†’ capture(), list_monitors()
 
 renine/vision/ocr.py
-  → OCR & visual question answering using Qwen2.5-VL via Ollama
-  → extract_text(), describe_image()
+  â†’ OCR & visual question answering using Qwen2.5-VL via Ollama
+  â†’ extract_text(), describe_image()
 
 renine/vision/webcam.py
-  → Webcam capture with session-level consent verification
-  → WebcamManager class
+  â†’ Webcam capture with session-level consent verification
+  â†’ WebcamManager class
 
 ============================================================
 VOICE
 ============================================================
 renine/voice/wake_word.py
-  → Wake word detection with phonetic variants
-  → check_wake_word(), extract_command_after_wake_word()
+  â†’ Wake word detection with phonetic variants
+  â†’ check_wake_word(), extract_command_after_wake_word()
 
 renine/voice/stt.py
-  → faster-whisper STT interface
-  → transcribe_audio(), transcribe_file(), unload_model()
+  â†’ faster-whisper STT interface
+  â†’ transcribe_audio(), transcribe_file(), unload_model()
 
 renine/voice/tts.py
-  → Piper TTS interface
-  → synthesize(), synthesize_to_file()
+  â†’ Piper TTS interface
+  â†’ synthesize(), synthesize_to_file()
 
 renine/voice/audio_pipeline.py
-  → Full voice interaction loop
-  → AudioPipeline class, AudioPipelineState
+  â†’ Full voice interaction loop
+  â†’ AudioPipeline class, AudioPipelineState
 
 ============================================================
 SECURITY
 ============================================================
 renine/security/input_validator.py
-  → Input sanitization and validation
-  → validate_text_input(), validate_path(), validate_shell_input()
+  â†’ Input sanitization and validation
+  â†’ validate_text_input(), validate_path(), validate_shell_input()
 
 renine/security/confirmation_gate.py
-  → Confirmation prompts for destructive actions
-  → request_confirmation(), requires_confirmation()
+  â†’ Confirmation prompts for destructive actions
+  â†’ request_confirmation(), requires_confirmation()
 
 renine/security/encryption.py
-  → Fernet symmetric encryption
-  → encrypt(), decrypt(), generate_key()
+  â†’ Fernet symmetric encryption
+  â†’ encrypt(), decrypt(), generate_key()
 
 ============================================================
 TOOLS
 ============================================================
 renine/tools/permissions.py
-  → PermissionLevel enum (single source of truth)
+  â†’ PermissionLevel enum (single source of truth)
 
 renine/tools/registry.py
-  → Tool registration and discovery
-  → @register_tool decorator, ToolRegistry, BaseTool, ToolResult
+  â†’ Tool registration and discovery
+  â†’ @register_tool decorator, ToolRegistry, BaseTool, ToolResult
 
 renine/tools/executor.py
-  → Safe tool execution pipeline
-  → execute_tool()
+  â†’ Safe tool execution pipeline
+  â†’ execute_tool()
 
 renine/tools/system/app_launcher.py
-  → Tool to launch whitelisted apps using subprocess
-  → AppLauncherTool class
+  â†’ Tool to launch whitelisted apps using subprocess
+  â†’ AppLauncherTool class
 
 renine/tools/system/volume_control.py
-  → Tool to adjust master sound volume via PowerShell
-  → VolumeControlTool class
+  â†’ Tool to adjust master sound volume via PowerShell
+  â†’ VolumeControlTool class
 
 renine/tools/system/clipboard.py
-  → Tool to get/set clipboard text via Win32 ctypes
-  → ClipboardTool class
+  â†’ Tool to get/set clipboard text via Win32 ctypes
+  â†’ ClipboardTool class
 
 renine/tools/files/pdf_reader.py
-  → Tool to extract text from PDF documents using PyMuPDF
-  → PDFReaderTool class
+  â†’ Tool to extract text from PDF documents using PyMuPDF
+  â†’ PDFReaderTool class
 
 renine/tools/files/file_reader.py
-  → Tool to read TXT, PDF, and DOCX documents securely
-  → FileReaderTool class
+  â†’ Tool to read TXT, PDF, and DOCX documents securely
+  â†’ FileReaderTool class
 
 renine/tools/files/file_search.py
-  → Tool to search files by name, type, and content
-  → FileSearchTool class
+  â†’ Tool to search files by name, type, and content
+  â†’ FileSearchTool class
+
+renine/tools/web/browser_tool.py
+  -> Playwright headless browser automation with isolated temporary profiles
+  -> BrowserTool.execute()

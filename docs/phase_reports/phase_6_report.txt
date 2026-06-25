@@ -1,0 +1,135 @@
+﻿============================================================
+RENINE - PHASE 6 REPORT
+============================================================
+Date: 2026-06-25
+Phase: 6 - Web Operations
+Status: COMPLETE
+Version: 0.6.0
+Verification: 256/256 tests passing
+
+============================================================
+IMPLEMENTED DELIVERABLES
+============================================================
+1. External LLM Client
+   - Added renine/brain/external_client.py.
+   - External Anthropic requests are sanitized through ContextSanitizer before transmission.
+   - Local-only namespaces are blocked by sanitizer policy.
+   - Local Ollama fallback is used when external fallback is disabled, missing credentials, or external calls fail.
+
+2. Browser Operations
+   - Added renine/tools/web/browser_tool.py using Playwright.
+   - Browser runs in isolated temporary persistent profiles.
+   - Browser-extracted content is marked UNTRUSTED.
+   - Cookies are cleared before context close.
+   - Temporary profile cleanup is verified and reported if cleanup fails.
+   - No storage export APIs are used.
+
+3. BrowserAgent
+   - Added renine/agents/browser_agent.py.
+   - Routes browser planning through local Ollama where available.
+   - Executes BrowserTool through central tool executor.
+   - Preserves untrusted metadata in results.
+   - Memory access remains LAYER1_ONLY.
+   - Tests prove Layer 3 and Layer 4 access are denied and no memory writes occur.
+
+4. EmailAgent
+   - Added renine/agents/email_agent.py.
+   - Gmail OAuth default scope is gmail.readonly only.
+   - gmail.compose is absent by default and requested only when draft creation is explicitly enabled.
+   - Gmail draft creation is disabled by default through email.allow_draft_creation: false.
+   - gmail.send is never included in scopes and direct send requests are blocked.
+
+5. NewsAgent
+   - Added renine/agents/news_agent.py.
+   - Supports default general and tech RSS feeds.
+   - Supports user-supplied HTTP/HTTPS RSS URLs.
+   - Uses local Ollama summarization when available and falls back to formatted headlines.
+
+6. Routing and UI Integration
+   - Router recognizes BrowserAgent, EmailAgent, and NewsAgent intents.
+   - Electron IPC dispatch imports and instantiates BrowserAgent, EmailAgent, and NewsAgent.
+   - Electron status reports phase 6 and version 0.6.0.
+
+7. Dependency Consistency
+   - pyproject.toml version advanced to 0.6.0.
+   - Added Phase 6 dependencies: httpx, playwright, feedparser, google-auth, google-auth-oauthlib, google-api-python-client.
+
+8. Full-Suite Compatibility Fix
+   - SpreadsheetAgent path extraction now supports Windows paths containing spaces, needed for full test execution under this workspace path.
+
+============================================================
+SECURITY REQUIREMENT VERIFICATION
+============================================================
+[OK] ContextSanitizer is called on every external LLM request.
+[OK] Browser content is marked UNTRUSTED.
+[OK] Browser content cannot enter Layer 3 memory through BrowserAgent.
+[OK] Browser content cannot enter Layer 4 memory through BrowserAgent.
+[OK] Gmail send is disabled by default and blocked by policy.
+[OK] Gmail scopes are readonly by default.
+[OK] Gmail compose scope is absent by default and gated by configuration.
+[OK] Playwright uses isolated temporary profiles.
+[OK] Browser profile cleanup is verified.
+[OK] No persistent cookies are intentionally stored.
+[OK] No storage export APIs are used.
+
+============================================================
+TEST RESULTS
+============================================================
+Focused Phase 6 tests during implementation:
+- EmailAgent: 7/7 passed
+- BrowserTool: 6/6 passed
+- BrowserAgent: 5/5 passed
+- IPC/router focused tests: 12/12 passed
+- Phase 6 focused suite: 35/35 passed
+
+Final full suite:
+- 256/256 passed
+- Command used: python -m pytest -q --basetemp C:\Users\efren\Downloads\PROJEC~1.0\.tmp_pytest -o cache_dir=.pytest_cache_run
+
+Note: A first full-suite attempt using the default Windows temp path failed because the sandbox denied access to AppData\Local\Temp. This was environmental, not a code failure. Rerunning with a workspace temp directory completed successfully.
+
+============================================================
+MODIFIED FILES
+============================================================
+config/settings.yaml
+config/tools.yaml
+pyproject.toml
+renine/agents/__init__.py
+renine/agents/browser_agent.py
+renine/agents/email_agent.py
+renine/agents/news_agent.py
+renine/agents/spreadsheet_agent.py
+renine/brain/external_client.py
+renine/brain/router.py
+renine/tools/__init__.py
+renine/tools/web/__init__.py
+renine/tools/web/browser_tool.py
+renine/ui/electron/ipc_handlers.ts
+tests/agents/test_browser_agent.py
+tests/agents/test_email_agent.py
+tests/agents/test_news_agent.py
+tests/brain/test_external_client.py
+tests/brain/test_router.py
+tests/tools/test_browser_tool.py
+tests/ui/test_ipc_phase6_dispatch.py
+docs/changelog.txt
+docs/features.txt
+docs/code_map.txt
+docs/folder_structure.txt
+docs/project_state.txt
+docs/session_handoff.txt
+docs/phase_reports/phase_6_report.txt
+
+============================================================
+REMAINING ISSUES
+============================================================
+None for Phase 6.
+
+Existing future technical debt remains tracked separately:
+- TD-001: Electron UI inline JS (Low)
+- TD-002: Audio pipeline VAD not full (Low)
+
+============================================================
+FINAL RECOMMENDATION
+============================================================
+Phase 6 Complete.

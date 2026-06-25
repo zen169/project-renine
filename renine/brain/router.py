@@ -145,6 +145,34 @@ def route(user_input: str, context: list[dict[str, str]] | None = None) -> Route
             metadata={"reason": "vision_keywords"},
         )
 
+    # Phase 6 routing rules
+    email_keywords = ("email", "inbox", "gmail", "draft", "compose")
+    if any(kw in query for kw in email_keywords):
+        logger.info("routing_to_email_agent", input=user_input)
+        return RouteDecision(
+            target=RouteTarget.EMAIL_AGENT,
+            confidence=1.0,
+            metadata={"reason": "email_keywords"},
+        )
+
+    news_keywords = ("headlines", "news", "rss feed", "fetch rss")
+    if any(kw in query for kw in news_keywords):
+        logger.info("routing_to_news_agent", input=user_input)
+        return RouteDecision(
+            target=RouteTarget.NEWS_AGENT,
+            confidence=1.0,
+            metadata={"reason": "news_keywords"},
+        )
+
+    browser_keywords = ("search web", "google", "wikipedia", "browse", "look up on the web", "web search", "go to webpage", "website")
+    if any(kw in query for kw in browser_keywords):
+        logger.info("routing_to_browser_agent", input=user_input)
+        return RouteDecision(
+            target=RouteTarget.BROWSER_AGENT,
+            confidence=1.0,
+            metadata={"reason": "browser_keywords"},
+        )
+
     # Fallback to MainBrainAgent
     logger.info(
         "input_routed",
@@ -155,5 +183,5 @@ def route(user_input: str, context: list[dict[str, str]] | None = None) -> Route
     return RouteDecision(
         target=RouteTarget.MAIN_BRAIN,
         confidence=1.0,
-        metadata={"phase": 5, "method": "default_routing"},
+        metadata={"phase": 6, "method": "default_routing"},
     )
