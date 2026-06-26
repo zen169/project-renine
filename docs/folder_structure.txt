@@ -1,4 +1,4 @@
-﻿============================================================
+============================================================
 RENINE â€” FOLDER STRUCTURE
 ============================================================
 Last Updated: 2026-06-25
@@ -224,3 +224,57 @@ tests/agents/test_news_agent.py
 tests/tools/test_browser_tool.py
 tests/ui/test_ipc_phase6_dispatch.py
 docs/phase_reports/phase_6_report.txt
+
+============================================================
+PHASE 7 STRUCTURE ADDITIONS
+============================================================
+renine/tools/smart_home/
+├── __init__.py
+└── hass_client.py
+renine/databases/models/pending_smart_home_action.py
+renine/databases/models/smart_device.py
+tests/tools/test_hass_client.py
+tests/agents/test_smart_home_agent.py
+tests/databases/test_smart_device.py
+docs/phase_reports/phase_7_report.md
+
+============================================================
+PHASE 8 STRUCTURE ADDITIONS
+============================================================
+api/
+├── __init__.py
+├── server.py
+├── auth.py
+├── rate_limiting.py
+├── models.py
+└── endpoints.py
+tests/api/
+├── __init__.py
+├── test_server.py
+└── test_endpoints.py
+docs/phase_reports/phase_8_report.md
+SESSION_HANDOFF.md
+
+mobile/
+├── App.tsx
+├── app.json
+├── package.json
+├── tsconfig.json
+├── theme/
+│   └── colors.ts
+├── services/
+│   ├── api.ts
+│   └── auth.tsx
+├── components/
+│   ├── ScreenContainer.tsx
+│   ├── GlassCard.tsx
+│   ├── GlowingButton.tsx
+│   └── GlowingInput.tsx
+├── screens/
+│   ├── LoginScreen.tsx
+│   ├── MemoryScreen.tsx
+│   ├── SmartHomeScreen.tsx
+│   ├── PetsScreen.tsx
+│   └── RemindersScreen.tsx
+└── navigation/
+    └── AppNavigator.tsx

@@ -1,4 +1,4 @@
-﻿============================================================
+============================================================
 RENINE â€” CODE MAP
 ============================================================
 Last Updated: 2026-06-25
@@ -258,3 +258,59 @@ renine/tools/files/file_search.py
 renine/tools/web/browser_tool.py
   -> Playwright headless browser automation with isolated temporary profiles
   -> BrowserTool.execute()
+
+============================================================
+SMART HOME (PHASE 7)
+============================================================
+renine/tools/smart_home/hass_client.py
+  → Home Assistant API client supporting state retrieval and service control
+  → HassClient class
+renine/databases/models/pending_smart_home_action.py
+  → SQLAlchemy model for confirmation gate staging of smart home actions
+  → PendingSmartHomeAction class
+renine/databases/models/smart_device.py
+  → SQLAlchemy model for smart device cache
+  → SmartDevice class
+
+============================================================
+MOBILE COMPANION API (PHASE 8)
+============================================================
+api/server.py
+  → FastAPI application factory and entry point, manages HTTPS and binding
+  → create_app(), main(), _resolve_host()
+api/auth.py
+  → JWT token generation and verification, get_current_user dependency, bcrypt password hash
+  → create_access_token(), verify_token(), get_current_user(), verify_password()
+api/rate_limiting.py
+  → SlowAPI rate limiter middleware setup
+  → limiter, get_default_limit(), rate_limit_exceeded_handler()
+api/models.py
+  → Pydantic request and response schemas for all endpoints
+  → TokenResponse, HealthResponse, ContextResponse, HistoryResponse, MindResponse, PersonalityResponse, DeviceListResponse, DeviceStateResponse, CreateActionRequest, CreateActionResponse, ConfirmActionResponse, PetListResponse, FeedResponse, RemindersResponse
+api/dependencies.py
+  → Data-access mediator dependencies applying ContextSanitizer and whitelists
+  → get_layer1_context(), get_layer2_history(), get_layer3_mind(), get_layer4_personality(), get_smart_devices(), get_smart_device_by_entity(), create_pending_action(), confirm_pending_action(), get_pets(), feed_pet(), get_scheduled_reminders()
+api/endpoints.py
+  → FastAPI route handlers with JWT check and rate limits
+  → login(), health(), get_context(), get_history(), get_mind(), get_personality(), list_devices(), get_device_state(), create_action(), confirm_action(), list_pets(), feed_pet_endpoint(), list_reminders()
+
+============================================================
+MOBILE COMPANION APP (PHASE 8)
+============================================================
+mobile/App.tsx
+  → Application entry rendering safe area provider, Auth context, and AppNavigator
+mobile/theme/colors.ts
+  → Cyberpunk color scheme mapping cyans, violets, and deep dark backings
+mobile/services/api.ts
+  → Backend client communicating with FastAPI endpoint services
+  → ApiService class
+mobile/services/auth.tsx
+  → Global React context provider storing JWT credentials via secure store
+  → AuthProvider, useAuth()
+mobile/components/
+  → Reusable glowing layout blocks: ScreenContainer, GlassCard, GlowingButton, GlowingInput
+mobile/screens/
+  → Core UI views: LoginScreen, MemoryScreen, SmartHomeScreen, PetsScreen, RemindersScreen
+mobile/navigation/AppNavigator.tsx
+  → Authenticated React Navigation Stack & Bottom Tab routers
+  → AppNavigator, TabNavigator

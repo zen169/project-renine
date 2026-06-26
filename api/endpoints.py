@@ -4,7 +4,7 @@ Milestone 1 routes:
     POST /api/auth/login   — Exchange username + password for a JWT token.
     GET  /api/health       — Unauthenticated health check (server liveness probe).
 
-All data-access routes (Milestone 2) will be added to this file.
+Milestone 2 routes (Memory, Smart Home, Pets, Reminders) are now fully implemented.
 """
 from __future__ import annotations
 
@@ -13,35 +13,44 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import BaseModel
 
 from renine.core.config import get_settings
 from renine.core.logging_config import get_logger
-from api.auth import create_access_token, get_current_user, get_password_hash, verify_password
+from api.auth import create_access_token, get_current_user, verify_password
 from api.rate_limiting import limiter
+from api.models import (
+    TokenResponse,
+    HealthResponse,
+    ContextResponse,
+    HistoryResponse,
+    MindResponse,
+    PersonalityResponse,
+    DeviceListResponse,
+    DeviceStateResponse,
+    CreateActionRequest,
+    CreateActionResponse,
+    ConfirmActionResponse,
+    PetListResponse,
+    FeedResponse,
+    RemindersResponse,
+)
+from api.dependencies import (
+    get_layer1_context,
+    get_layer2_history,
+    get_layer3_mind,
+    get_layer4_personality,
+    get_smart_devices,
+    get_smart_device_by_entity,
+    create_pending_action,
+    confirm_pending_action,
+    get_pets,
+    feed_pet,
+    get_scheduled_reminders,
+)
 
 logger = get_logger(__name__)
 
 router = APIRouter(prefix="/api")
-
-
-# ---------------------------------------------------------------------------
-# Pydantic schemas
-# ---------------------------------------------------------------------------
-
-class TokenResponse(BaseModel):
-    """Response schema for successful authentication."""
-
-    access_token: str
-    token_type: str
-
-
-class HealthResponse(BaseModel):
-    """Response schema for health check."""
-
-    status: str
-    version: str
-    api_enabled: bool
 
 
 # ---------------------------------------------------------------------------
@@ -158,3 +167,268 @@ async def health(request: Request) -> HealthResponse:
         version=version,
         api_enabled=api_enabled,
     )
+
+
+# ---------------------------------------------------------------------------
+# GET /api/memory/context
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/memory/context",
+    response_model=ContextResponse,
+    summary="Get conversation context",
+)
+@limiter.limit("60/minute")
+async def get_context(
+    request: Request,
+    current_user: Annotated[str, Depends(get_current_user)],
+) -> ContextResponse:
+    """Retrieve the current active conversation context (Layer 1)."""
+    messages = get_layer1_context()
+    return ContextResponse(messages=messages, count=len(messages))
+
+
+# ---------------------------------------------------------------------------
+# GET /api/memory/history
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/memory/history",
+    response_model=HistoryResponse,
+    summary="Get conversation history",
+)
+@limiter.limit("60/minute")
+async def get_history(
+    request: Request,
+    current_user: Annotated[str, Depends(get_current_user)],
+    limit: int = 20,
+) -> HistoryResponse:
+    """Retrieve recent conversation summary history (Layer 2)."""
+    conversations = get_layer2_history(limit=limit)
+    return HistoryResponse(conversations=conversations, count=len(conversations))
+
+
+# ---------------------------------------------------------------------------
+# GET /api/memory/mind
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/memory/mind",
+    response_model=MindResponse,
+    summary="Get facts from mind database",
+)
+@limiter.limit("60/minute")
+async def get_mind(
+    request: Request,
+    current_user: Annotated[str, Depends(get_current_user)],
+    namespace: str,
+    query: str | None = None,
+    limit: int = 50,
+) -> MindResponse:
+    """Retrieve facts from the mind database (Layer 3), filtered by whitelist."""
+    records = get_layer3_mind(namespace=namespace, query=query, limit=limit)
+    return MindResponse(records=records, count=len(records), namespace=namespace)
+
+
+# ---------------------------------------------------------------------------
+# GET /api/memory/personality
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/memory/personality",
+    response_model=PersonalityResponse,
+    summary="Get profiles from personality database",
+)
+@limiter.limit("60/minute")
+async def get_personality(
+    request: Request,
+    current_user: Annotated[str, Depends(get_current_user)],
+    query: str | None = None,
+    limit: int = 50,
+) -> PersonalityResponse:
+    """Retrieve people profiles (Layer 4), filtered by whitelist."""
+    people = get_layer4_personality(query=query, limit=limit)
+    return PersonalityResponse(people=people, count=len(people))
+
+
+# ---------------------------------------------------------------------------
+# GET /api/smart-home/devices
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/smart-home/devices",
+    response_model=DeviceListResponse,
+    summary="List cached smart devices",
+)
+@limiter.limit("60/minute")
+async def list_devices(
+    request: Request,
+    current_user: Annotated[str, Depends(get_current_user)],
+    domain: str | None = None,
+) -> DeviceListResponse:
+    """Retrieve cached smart home devices from the local database."""
+    devices = get_smart_devices(domain=domain)
+    return DeviceListResponse(devices=devices, count=len(devices))
+
+
+# ---------------------------------------------------------------------------
+# GET /api/smart-home/devices/{entity_id}
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/smart-home/devices/{entity_id}",
+    response_model=DeviceStateResponse,
+    summary="Get specific smart device state",
+)
+@limiter.limit("60/minute")
+async def get_device_state(
+    request: Request,
+    entity_id: str,
+    current_user: Annotated[str, Depends(get_current_user)],
+) -> DeviceStateResponse:
+    """Retrieve the cached state and attributes of a specific device."""
+    device = get_smart_device_by_entity(entity_id)
+    if not device:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Smart device with entity ID '{entity_id}' not found.",
+        )
+    return DeviceStateResponse(**device)
+
+
+# ---------------------------------------------------------------------------
+# POST /api/smart-home/actions
+# ---------------------------------------------------------------------------
+
+@router.post(
+    "/smart-home/actions",
+    response_model=CreateActionResponse,
+    summary="Create a pending smart home action",
+)
+@limiter.limit("60/minute")
+async def create_action(
+    request: Request,
+    action_req: CreateActionRequest,
+    current_user: Annotated[str, Depends(get_current_user)],
+) -> CreateActionResponse:
+    """Create a new pending smart home action requiring confirmation."""
+    entity_id = action_req.entity_id
+    service = action_req.service
+    if "." not in entity_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid entity_id format. Must be 'domain.name'.",
+        )
+    domain = entity_id.split(".", 1)[0]
+    try:
+        action = create_pending_action(entity_id=entity_id, domain=domain, service=service)
+        return CreateActionResponse(
+            action=action,
+            message="Smart home action created. Confirmation required.",
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        )
+
+
+# ---------------------------------------------------------------------------
+# POST /api/smart-home/actions/{action_id}/confirm
+# ---------------------------------------------------------------------------
+
+@router.post(
+    "/smart-home/actions/{action_id}/confirm",
+    response_model=ConfirmActionResponse,
+    summary="Confirm and execute a pending action",
+)
+@limiter.limit("60/minute")
+async def confirm_action(
+    request: Request,
+    action_id: int,
+    current_user: Annotated[str, Depends(get_current_user)],
+) -> ConfirmActionResponse:
+    """Execute a pending smart home action by ID after confirmation."""
+    try:
+        result = confirm_pending_action(action_id)
+        return ConfirmActionResponse(**result)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        )
+
+
+# ---------------------------------------------------------------------------
+# GET /api/pets
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/pets",
+    response_model=PetListResponse,
+    summary="List household pets",
+)
+@limiter.limit("60/minute")
+async def list_pets(
+    request: Request,
+    current_user: Annotated[str, Depends(get_current_user)],
+) -> PetListResponse:
+    """Retrieve household pets, excluding sensitive medical details."""
+    pets = get_pets()
+    return PetListResponse(pets=pets, count=len(pets))
+
+
+# ---------------------------------------------------------------------------
+# POST /api/pets/{name}/feed
+# ---------------------------------------------------------------------------
+
+@router.post(
+    "/pets/{name}/feed",
+    response_model=FeedResponse,
+    summary="Record a pet feeding event",
+)
+@limiter.limit("60/minute")
+async def feed_pet_endpoint(
+    request: Request,
+    name: str,
+    current_user: Annotated[str, Depends(get_current_user)],
+) -> FeedResponse:
+    """Record a feeding event for the named pet."""
+    try:
+        success = feed_pet(name)
+        if not success:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Pet named '{name}' not found.",
+            )
+        return FeedResponse(
+            success=True,
+            message=f"{name} has been successfully marked as fed.",
+            pet_name=name,
+        )
+    except Exception as exc:
+        if isinstance(exc, HTTPException):
+            raise exc
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(exc),
+        )
+
+
+# ---------------------------------------------------------------------------
+# GET /api/reminders
+# ---------------------------------------------------------------------------
+
+@router.get(
+    "/reminders",
+    response_model=RemindersResponse,
+    summary="Get scheduled reminders",
+)
+@limiter.limit("60/minute")
+async def list_reminders(
+    request: Request,
+    current_user: Annotated[str, Depends(get_current_user)],
+) -> RemindersResponse:
+    """Retrieve active scheduled reminders from the system scheduler."""
+    reminders = get_scheduled_reminders()
+    return RemindersResponse(reminders=reminders, count=len(reminders))

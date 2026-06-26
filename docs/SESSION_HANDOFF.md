@@ -1,87 +1,150 @@
 # PROJECT RENINE — Session Handoff
 Last Updated: 2026-06-26
-Current Phase: Phase 7 Completed / Phase 8 Planning
-Version: 0.7.0
+Current Phase: Phase 8 — Mobile Companion ✅ COMPLETE
+Version: 0.8.0
 
 ---
 
 ## Overview
 
-Phase 7 (both 7A Read-Only and 7B Safe Device Control) is **100% Complete** and fully covered by the test suite. All tests pass successfully.
+Phase 8 built a mobile-accessible interface for remote home management. The FastAPI backend (Milestones 1 & 2), the Expo React Native mobile app (Milestone 3), and the final regression audit (Milestone 4) are all **complete**. Project Renine is now at Version 0.8.0.
 
 ---
 
 ## Current Status
 
-### Completed Milestones
-- **Phase 1 — MVP Foundation**: Core setup, voice pipeline, and initial MainBrainAgent.
-- **Phase 2 — Memory System**: SQLite + ChromaDB 4-layer memory.
-- **Phase 3 — Personal Databases**: Inventory, Pet, and House database agents.
-- **Phase 4 — Desktop Control & File Management**: File readers/indexers, desktop utilities.
-- **Phase 5 — Vision Integration**: Screenshots, OCR, and camera integration.
-- **Phase 6 — Web Operations**: Isolated Playwright browser operation and Gmail integration.
-- **Phase 7 — Smart Home Integration**:
-  - **Phase 7A (Read-Only)**: `HassClient` (GET), entity discovery, entity cache.
-  - **Phase 7B (Safe Device Control)**: `HassClient` (POST), `PendingSmartHomeAction` confirmation gate flow, service/domain allowlist checks, and automatic 5-minute action expiration logic.
+### Test Counts
+- **Total tests**: 419 tests, 419 passing, 0 failed, 0 skipped.
+- Run time: ~37 seconds.
 
-### Remaining Milestones
-- **Phase 8 — Scheduling & Automation**: Calendar integration, task scheduling, automation rules.
-- **Phase 9 — Advanced Personalization**: Preference modeling, memory consolidation.
-- **Phase 10 — Production Hardening**: Performance tuning, package consolidation, security review.
-
-### Current Test Counts
-- **Total tests**: 359 tests collected and passing (0 failed, 0 skipped).
-- Complete smart home test suite runs in ~26 seconds (95 tests).
+### Mobile App
+- TypeScript: ✅ Clean (`npx tsc --noEmit` = 0 errors)
+- Expo export: ✅ Successful
 
 ---
 
-## Architectural Summary & Important Decisions
+## All Completed Phases
 
-### 1. Database Schema Changes
-The database schema (`mind.db`) has been expanded to support state caching and confirmation gates:
-* **`smart_devices` Table**: Local cache of HASS entities.
-* **`pending_smart_home_actions` Table** [Phase 7B]:
-  * Columns: `id` (PK), `entity_id` (String), `domain` (String), `service` (String), `service_data` (JSON), `requested_at` (DateTime), `expires_at` (DateTime), `status` (String - `pending`, `executed`, `expired`, `cancelled`).
-
-### 2. Smart Home Control & Confirmation Flow
-All state-changing actions are guarded by a mandatory DB-backed confirmation gate:
-1. **Intent Parsing**: User command (e.g., "turn off light.living_room") parsed by agent.
-2. **Safety Check**: Checks if the domain and service are allowlisted.
-3. **Database Staging**: Prevents immediate HASS call by saving a `PendingSmartHomeAction` row with `status='pending'` and an expiry timestamp 5 minutes into the future.
-4. **User Prompt**: Agent requests explicit confirmation.
-5. **Confirmation**: User replies with `yes`, `y`, or `confirm`.
-6. **Execution**: The agent fetches the pending action, confirms it has not expired, issues `HassClient.call_service()`, and sets status to `executed`.
-
-### 3. Key Design Decisions
-* **Persistent httpx Client**: [HassClient](file:///c:/Users/efren/Downloads/PROJECT%20RENINE%20V1.0/renine/tools/smart_home/hass_client.py#L84) encapsulates all network calls. Agents never invoke HTTP libraries directly.
-* **Timezone Safety**: Standards enforced around `datetime.datetime.now(datetime.timezone.utc)`. Timezone-naive datetimes retrieved from SQLite are normalized to UTC-aware before comparison to prevent `TypeError` exceptions.
-* **Allowlist Enforcement**: Service calls restricted strictly to allowlisted domains (`light`, `switch`, `fan`, `cover`) and actions (`turn_on`, `turn_off`, `toggle`, `open_cover`, `close_cover`, `stop_cover`).
+| Phase | Title | Status | Tests |
+|-------|-------|--------|-------|
+| 1 | MVP Foundation | ✅ COMPLETE | 133 |
+| 2 | Memory System | ✅ COMPLETE | 157 |
+| 3 | Personal Databases | ✅ COMPLETE | 168 |
+| 4 | Desktop Control & Files | ✅ COMPLETE | 188 |
+| 5 | Vision Integration | ✅ COMPLETE | 224 |
+| 6 | Web Operations | ✅ COMPLETE | 256 |
+| 7 | Smart Home Integration | ✅ COMPLETE | 359 |
+| 8 | Mobile Companion | ✅ COMPLETE | 419 |
 
 ---
 
-## Phase 7B Files Modified / Created
+## Phase 8 Summary
 
-* [pending_smart_home_action.py](file:///c:/Users/efren/Downloads/PROJECT%20RENINE%20V1.0/renine/databases/models/pending_smart_home_action.py) [NEW] — `PendingSmartHomeAction` model.
-* [a1b2c3d4e5f6_add_pending_smart_home_actions_table.py](file:///c:/Users/efren/Downloads/PROJECT%20RENINE%20V1.0/renine/databases/migrations/versions/a1b2c3d4e5f6_add_pending_smart_home_actions_table.py) [NEW] — Alembic schema migration.
-* [models/__init__.py](file:///c:/Users/efren/Downloads/PROJECT%20RENINE%20V1.0/renine/databases/models/__init__.py) [MODIFIED] — Registers the pending action model.
-* [hass_client.py](file:///c:/Users/efren/Downloads/PROJECT%20RENINE%20V1.0/renine/tools/smart_home/hass_client.py) [MODIFIED] — Adds `_post()` and `call_service()`.
-* [smart_home_agent.py](file:///c:/Users/efren/Downloads/PROJECT%20RENINE%20V1.0/renine/agents/smart_home_agent.py) [MODIFIED] — Adds control intent handler, gate checks, and confirmation routines.
-* [tools.yaml](file:///c:/Users/efren/Downloads/PROJECT%20RENINE%20V1.0/config/tools.yaml) [MODIFIED] — Registers the `control_smart_device` tool specification.
-* [test_hass_client.py](file:///c:/Users/efren/Downloads/PROJECT%20RENINE%20V1.0/tests/tools/test_hass_client.py) [MODIFIED] — Adds service call coverage and safety tests.
-* [test_smart_home_agent.py](file:///c:/Users/efren/Downloads/PROJECT%20RENINE%20V1.0/tests/agents/test_smart_home_agent.py) [MODIFIED] — Adds confirmation gate tests.
+### Milestone 1 — Server Infrastructure & Auth ✅
+
+**New Files:**
+- `api/__init__.py` — Package namespace
+- `api/auth.py` — JWT creation/verification, bcrypt password hashing, `get_current_user` dependency
+- `api/rate_limiting.py` — SlowAPI limiter, configurable from `settings.yaml`, custom 429 handler
+- `api/server.py` — FastAPI app factory, self-signed TLS cert generation, local-only binding, lifespan, CORS
+- `api/endpoints.py` — `POST /api/auth/login`, `GET /api/health`
+- `tests/api/__init__.py` — Test package marker
+- `tests/api/test_server.py` — 31 unit tests
+
+**Modified Files:**
+- `pyproject.toml` — Added `fastapi`, `pyjwt`, `slowapi`, `python-multipart`
+- `config/settings.yaml` — Added `api:` block
+- `config/security.yaml` — Added `security.api` whitelist config
 
 ---
 
-## Known Limitations
+### Milestone 2 — API Endpoints Integration ✅
 
-1. **State Synchronization**: Cache database updates require manual sync (`sync`, `refresh`) operations; real-time WebSocket state streaming is not yet supported.
-2. **Session Persistence**: User confirmations must be received in the immediate session window while the action remains unexpired.
+**New Files:**
+- `api/models.py` — Pydantic response/request schemas for all routes
+- `api/dependencies.py` — Data-access helpers applying `ContextSanitizer` + field whitelists
+- `tests/api/test_endpoints.py` — 29 unit/integration tests
+
+**Endpoints:**
+
+| Method | Path | Auth |
+|--------|------|------|
+| `POST` | `/api/auth/login` | No |
+| `GET`  | `/api/health` | No |
+| `GET`  | `/api/memory/context` | JWT |
+| `GET`  | `/api/memory/history` | JWT |
+| `GET`  | `/api/memory/mind` | JWT |
+| `GET`  | `/api/memory/personality` | JWT |
+| `GET`  | `/api/smart-home/devices` | JWT |
+| `GET`  | `/api/smart-home/devices/{entity_id}` | JWT |
+| `POST` | `/api/smart-home/actions` | JWT |
+| `POST` | `/api/smart-home/actions/{action_id}/confirm` | JWT |
+| `GET`  | `/api/pets` | JWT |
+| `POST` | `/api/pets/{name}/feed` | JWT |
+| `GET`  | `/api/reminders` | JWT |
+
+**Security:** All memory endpoints enforce `security.yaml` field whitelists. Layer 3/4 sensitive fields stripped. No direct DB access from mobile.
 
 ---
 
-## Suggested Next Milestone
+### Milestone 3 — Mobile Companion App ✅
 
-**Phase 8 — Scheduling & Automation**
-- Integrate calendar support (retrieval and event creation).
-- Implement recurring task engines using APScheduler.
-- Establish rule-based automation triggers (e.g. sensor readings prompting cache-based triggers).
+**New Files:**
+- `mobile/theme/colors.ts` — Cyberpunk color tokens
+- `mobile/services/api.ts` — `ApiService` full backend client
+- `mobile/services/auth.tsx` — `AuthProvider` + `useAuth()` JWT state
+- `mobile/components/ScreenContainer.tsx` — Ambient glowing background wrapper
+- `mobile/components/GlassCard.tsx` — Translucent card with neon border
+- `mobile/components/GlowingButton.tsx` — Interactive button with activity states
+- `mobile/components/GlowingInput.tsx` — Text input with neon focus ring
+- `mobile/screens/LoginScreen.tsx` — Auth form with server URL config
+- `mobile/screens/MemoryScreen.tsx` — 4-tab memory viewer
+- `mobile/screens/SmartHomeScreen.tsx` — Device panel with confirmation modal
+- `mobile/screens/PetsScreen.tsx` — Pet bio-tracking cards and feed action
+- `mobile/screens/RemindersScreen.tsx` — APScheduler job status list
+- `mobile/navigation/AppNavigator.tsx` — Stack + bottom tab navigation
+
+**Modified Files:**
+- `mobile/App.tsx` — Integrated `AuthProvider` + `AppNavigator`
+
+---
+
+### Milestone 4 — Final Regression & Documentation ✅
+
+- Full regression: 419/419 passed
+- TypeScript: 0 errors
+- No TODOs/stubs
+- All docs synchronized
+
+---
+
+## Key Architectural Decisions
+
+1. **Lifespan over @on_event** — Modern FastAPI lifespan context manager (no deprecation warnings).
+2. **Triple-priority password auth** — `API_PASSWORD` env var → `password_hash` config → deny.
+3. **Self-signed cert** — Auto-generated via `cryptography` library at first launch.
+4. **Local-only binding** — `_resolve_host()` prevents `0.0.0.0` unless `allow_public_interface: true`.
+5. **JWT in expo-secure-store** — Automatic token clear on 401 response.
+6. **No direct DB from mobile** — All queries mediated through `api/dependencies.py` helpers.
+
+---
+
+## Known Issues
+
+- `StarletteDeprecationWarning: Using httpx with starlette.testclient is deprecated` — Upstream library issue. Not actionable until `httpx2` is stable.
+
+---
+
+## Next Phase
+
+**Phase 9 — Advanced Personalization**
+- Do not begin Phase 9 without explicit user instruction.
+
+---
+
+## Environment Notes
+
+- `API_PASSWORD` env var must be set before starting the API server (no password = deny all).
+- `JWT_SECRET` env var should be set for production use.
+- API server: `python -m api.server` or `uvicorn api.server:app --ssl-certfile certs/cert.pem --ssl-keyfile certs/key.pem`
+- Mobile: `cd mobile && npm start` (requires Expo Go on device or Android/iOS emulator)

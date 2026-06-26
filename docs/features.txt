@@ -1,10 +1,10 @@
 ============================================================
-RENINE â€” FEATURES TRACKER
+RENINE — FEATURES TRACKER
 ============================================================
-Last Updated: 2026-06-25
+Last Updated: 2026-06-26
 
 ============================================================
-PHASE 1 â€” IMPLEMENTED
+PHASE 1 — IMPLEMENTED
 ============================================================
 [x] YAML config loader with env var interpolation
 [x] Centralized structlog logging with daily rotation
@@ -12,7 +12,7 @@ PHASE 1 â€” IMPLEMENTED
 [x] Internal event bus (pub/sub)
 [x] Context sanitizer for external API payloads
 [x] Ollama client (sync + async streaming)
-[x] Input router (default â†’ MainBrainAgent)
+[x] Input router (default → MainBrainAgent)
 [x] Response builder (text, error, confirmation, tool result)
 [x] Base agent abstract class with manifests
 [x] Main brain agent (conversation via Qwen3 8B)
@@ -20,7 +20,7 @@ PHASE 1 â€” IMPLEMENTED
 [x] Wake word detection ("Renine")
 [x] STT via faster-whisper
 [x] TTS via Piper
-[x] Audio pipeline (micâ†’STTâ†’brainâ†’TTS)
+[x] Audio pipeline (mic→STT→brain→TTS)
 [x] Input validator (text, path, shell)
 [x] Confirmation gate for destructive actions
 [x] Fernet encryption for sensitive fields
@@ -30,7 +30,7 @@ PHASE 1 â€” IMPLEMENTED
 [x] Electron UI shell (chat window, voice indicator)
 
 ============================================================
-PHASE 2 â€” IMPLEMENTED
+PHASE 2 — IMPLEMENTED
 ============================================================
 [x] Layer 2 conversation history (SQLite, 48h TTL)
 [x] Layer 3 mind database (SQLite + ChromaDB)
@@ -42,7 +42,7 @@ PHASE 2 â€” IMPLEMENTED
 [x] Memory agent (context injection for MainBrainAgent)
 
 ============================================================
-PHASE 3 â€” IMPLEMENTED
+PHASE 3 — IMPLEMENTED
 ============================================================
 [x] Layer 3 Inventory schema, SQLAlchemy models and migrations
 [x] Layer 3 Pet profiles and feeding schedule models and migrations
@@ -55,7 +55,7 @@ PHASE 3 â€” IMPLEMENTED
 [x] Electron UI panels for Inventory, Pets, and Family/Friends profiles
 
 ============================================================
-PHASE 4 â€” IMPLEMENTED
+PHASE 4 — IMPLEMENTED
 ============================================================
 [x] App Launcher with secure, whitelist-based configuration
 [x] Windows Volume Control (via PowerShell with inline C# COM API)
@@ -70,7 +70,7 @@ PHASE 4 â€” IMPLEMENTED
 [x] Path traversal protection and allowed/blocked path validation
 
 ============================================================
-PHASE 5 â€” IMPLEMENTED
+PHASE 5 — IMPLEMENTED
 ============================================================
 [x] Screen capture using mss (monitor geometry, bounding boxes, resizing)
 [x] OCR pipeline using Qwen2.5-VL via local Ollama integration
@@ -105,19 +105,27 @@ PHASE 7 - IMPLEMENTED
 [x] Routing integration for SmartHomeAgent
 
 ============================================================
-PHASE 8 - IN PROGRESS (Milestone 1 Complete)
+PHASE 8 - IMPLEMENTED
 ============================================================
 [x] FastAPI server skeleton with HTTPS (self-signed cert auto-generation)
 [x] JWT authentication middleware and login endpoint
 [x] Rate limiting on all endpoints (SlowAPI)
 [x] Local-only binding enforcement (127.0.0.1 default)
 [x] /api/health liveness endpoint
-[ ] Memory query API endpoints (Layer 1-4)
-[ ] ContextSanitizer integration and field whitelisting on API responses
-[ ] Smart Home API endpoints (list, state, action, confirm)
-[ ] Pet API endpoints (list, feed)
-[ ] Reminders API endpoint
-[ ] Mobile companion app (Expo React Native)
+[x] Memory query API endpoints (Layer 1-4)
+[x] ContextSanitizer integration and field whitelisting on API responses
+[x] Smart Home API endpoints (list, state, action, confirm)
+[x] Pet API endpoints (list, feed)
+[x] Reminders API endpoint
+[x] Expo React Native TypeScript mobile app scaffolding
+[x] JWT stored in expo-secure-store with automatic 401 session clearing
+[x] Reusable glowing cyber-theme UI components (GlassCard, GlowingButton, GlowingInput, ScreenContainer)
+[x] LoginScreen with server URL configuration
+[x] MemoryScreen with 4-tab viewer (context, history, mind, personality)
+[x] SmartHomeScreen with device panel and confirmation modal gate
+[x] PetsScreen with bio-tracking cards and feeding triggers
+[x] RemindersScreen with APScheduler job status list
+[x] Bottom tab navigation with Ionicons and custom logout header
 
 ============================================================
 PHASE 9 - PLANNED

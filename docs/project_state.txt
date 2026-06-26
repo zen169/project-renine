@@ -1,10 +1,10 @@
-﻿============================================================
+============================================================
 RENINE - PROJECT STATE
 ============================================================
-Last Updated: 2026-06-25
-Current Phase: 6 (Web Operations)
+Last Updated: 2026-06-26
+Current Phase: 8 (Mobile Companion)
 Phase Status: COMPLETE
-Version: 0.6.0
+Version: 0.8.0
 
 ============================================================
 PHASE HISTORY
@@ -55,11 +55,28 @@ Phase 6 - Web Operations: COMPLETE (2026-06-25)
   - Electron IPC dispatch integrated for BrowserAgent, EmailAgent, and NewsAgent
   - Phase 6 dependencies declared and documentation synchronized
 
+Phase 7 - Smart Home Integration: COMPLETE (2026-06-25)
+  - 359/359 tests passing (103/103 new tests)
+  - Phase 7A: HassClient (read-only entity discovery, state cache) implemented
+  - Phase 7B: HassClient POST + call_service(), PendingSmartHomeAction confirmation gate
+  - SmartHomeAgent with full read/control intent dispatch and expiry logic
+  - Domain and service allowlist enforcement (light, switch, fan, cover)
+  - All state-changing actions staged in DB and require explicit user confirmation
+
+Phase 8 - Mobile Companion: COMPLETE (2026-06-26)
+  - 419/419 tests passing (60/60 new tests)
+  - Milestone 1: FastAPI server, HTTPS self-signed certs, JWT auth, SlowAPI rate limiting
+  - Milestone 2: Memory (4 layers), Smart Home, Pets, and Reminders API endpoints
+    with ContextSanitizer whitelisting; no direct DB access from mobile
+  - Milestone 3: Expo React Native TypeScript app — Login, Memory, Smart Home, Pets,
+    and Reminders screens; glowing cyberpunk UI; JWT stored in expo-secure-store
+  - Milestone 4: Verification audit passed (0 TODOs, 0 TypeScript errors), all docs updated
+
 ============================================================
 NEXT PHASE
 ============================================================
-Phase 7 - Smart Home Integration
-Prerequisites: Phase 6 complete
+Phase 9 - Advanced Personalization
+Prerequisites: Phase 8 complete
 Status: Not started
 
 ============================================================
@@ -70,7 +87,11 @@ None.
 ============================================================
 NOTES
 ============================================================
-- Phase 6 is complete and compliant with the original Phase 6 security requirements.
-- Do not begin Phase 7 without explicit user instruction.
+- Phase 8 is complete and compliant with original Phase 8 security requirements.
+- Do not begin Phase 9 without explicit user instruction.
+- API server binds to 127.0.0.1 by default; set allow_public_interface: true in
+  security.yaml only for explicit LAN access.
+- JWT secret is loaded from JWT_SECRET env var; must be set before production use.
+- API_PASSWORD env var must be set to enable login; no password = deny all.
 - Ollama must be running with qwen3:8b pulled before local LLM use.
 - Playwright browser binaries may need installation in a fresh environment before live browser automation.

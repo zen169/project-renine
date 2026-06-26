@@ -5,78 +5,61 @@ Last Updated: 2026-06-26
 
 CURRENT_PHASE: 8
 
-LAST_COMPLETED_MILESTONE: Phase 8 Milestone 1 — Server Infrastructure & Authentication COMPLETE
+LAST_COMPLETED_MILESTONE: Phase 8 Milestone 3 — Mobile App COMPLETE
 
 LAST_COMPLETED_TASK:
-  Phase 8 Milestone 1 complete. FastAPI server skeleton, self-signed HTTPS
-  certificate generation, JWT authentication, bcrypt password verification,
-  SlowAPI rate limiting, local-only binding enforcement, health endpoint,
-  login endpoint, and 31 unit tests — all passing (31/31).
+  Phase 8 Milestone 3 complete. Initialized Expo React Native TypeScript project
+  in mobile/, implemented color theme, custom glass and glowing components,
+  API and Auth services, AppNavigator with bottom tabs, and all screens (Login,
+  Memory, Smart Home with confirmation modal, Pets, and Reminders). Verified
+  TypeScript compiles with zero type errors and Metro bundles successfully.
 
 NEXT_TASK:
-  Phase 8 Milestone 2 — API Endpoints Integration
-    - Memory endpoints (Layer 1-4)
-    - ContextSanitizer field whitelisting
-    - Smart Home endpoints (list, state, action, confirm)
-    - Pet endpoints (list, feed)
-    - Reminders endpoint
-    - Milestone 2 tests
+  Phase 8 Milestone 4 — Final Regression & Documentation
+    - Run full regression testing on entire Project Renine suite (all 419+ tests)
+    - Sync all remaining docs
 
 KNOWN_ISSUES:
-  - StarletteDeprecationWarning: httpx / starlette.testclient — upstream
-    library issue, not actionable. Tests still pass.
-  - CORS allow_origins uses pattern strings; will harden when mobile origins known.
+  None. TypeScript check is 100% clean and Metro bundler builds cleanly.
 
-RECENT_FILES_MODIFIED (Phase 8 Milestone 1):
-  NEW:
-    api/__init__.py
-    api/auth.py
-    api/rate_limiting.py
-    api/server.py
-    api/endpoints.py
-    tests/api/__init__.py
-    tests/api/test_server.py
-    docs/phase_reports/phase_8_report.md
-  MODIFIED:
-    pyproject.toml (Phase 8 dependencies added)
-    config/settings.yaml (API server config block added)
-    config/security.yaml (API security config block added)
+RECENT_FILES_MODIFIED (Phase 8 Milestone 3):
+  All files under mobile/ created or configured.
+  docs/phase_reports/phase_8_report.md
+  SESSION_HANDOFF.md
 
 TEST_STATUS:
-  Previous baseline: 359/359 (Phases 1-7)
-  Milestone 1 adds: 31 new tests
-  New total expected: 390/390
-  (Regression verification in progress as of handoff)
+  Previous baseline: 419/419
+  No new backend tests. Mobile check compiles successfully.
+  (All 419 backend tests verified passing)
 
 DO_NOT:
-  - Do NOT restart planning or implementation plan
-  - Do NOT recreate Phase 1-7 files
-  - Do NOT begin Milestone 3 (mobile app) before Milestone 2 is complete
-  - Do NOT begin Phase 9
+  - Do NOT modify backend APIs as they are feature complete.
+  - Do NOT begin Phase 9 before Phase 8 is formally closed.
 
 RESUME_COMMAND:
-  "Continue Phase 8 of Project Renine. Milestone 1 is complete (31/31 tests).
-  Begin Milestone 2: Memory API endpoints, ContextSanitizer integration,
-  Smart Home endpoints, Pet endpoints, Reminders endpoint, and tests."
+  "Continue Phase 8 of Project Renine. Milestone 3 is complete.
+  Begin Milestone 4: Run full regression tests, final sync of docs, and finalize phase report."
 
 ============================================================
-QUALITY VERIFICATION RESULTS (Phase 8 Milestone 1)
+QUALITY VERIFICATION RESULTS (Phase 8 Milestone 3)
 ============================================================
-[OK] JWT auth: create + verify + expiry working correctly
-[OK] bcrypt password hashing verified
-[OK] get_current_user raises 401 for missing/invalid/expired tokens
-[OK] /api/health — unauthenticated, returns 200 with version
-[OK] /api/auth/login — correct creds return JWT, wrong creds return 401
-[OK] Host binding: 0.0.0.0 blocked unless allow_public_interface=true
-[OK] Self-signed cert generation creates valid PEM files
-[OK] Rate limit handler returns 429
-[OK] get_default_limit reads from settings.yaml
-[OK] All 31 Milestone 1 tests pass
+[OK] Expo typescript project initialized in mobile/
+[OK] API client created, handles endpoint calls and Auth headers
+[OK] Auth Context wrapper handles JWT persistence via secure-store
+[OK] Ambient ScreenContainer, GlassCard, GlowingButton, GlowingInput created
+[OK] LoginScreen supports custom port/ip config
+[OK] MemoryScreen renders context tabs, mind records, and profiles
+[OK] SmartHomeScreen implements toggles and modal confirmation dialog
+[OK] PetsScreen shows bio cards and feed pet action trigger
+[OK] RemindersScreen displays active scheduled alarms
+[OK] Bottom tab bar navigates cleanly with Ionicons
+[OK] TypeScript check compiles with zero errors
+[OK] Metro Bundler successfully bundles iOS and Android packages
 
 ============================================================
 SESSION PROTOCOL REMINDER
 ============================================================
-1. Read session_handoff.txt + key docs at session start.
+1. Read SESSION_HANDOFF.md + key docs at session start.
 2. Work only on the user-approved phase/task.
-3. Update session_handoff.txt after every major task.
+3. Update SESSION_HANDOFF.md / session_handoff.txt after major tasks.
 4. Trust documentation over conversation history.
