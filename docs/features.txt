@@ -1,4 +1,4 @@
-﻿============================================================
+============================================================
 RENINE â€” FEATURES TRACKER
 ============================================================
 Last Updated: 2026-06-25
@@ -96,9 +96,30 @@ PHASE 6 - IMPLEMENTED
 [x] Phase 6 dependency declarations and security-focused tests
 
 ============================================================
-PHASE 7-9 - PLANNED
+PHASE 7 - IMPLEMENTED
 ============================================================
-[ ] Smart home integration
-[ ] Mobile companion
-[ ] Level 5 continuous learning
+[x] Home Assistant REST and WebSocket client (HassClient)
+[x] SmartHomeAgent with entity discovery, state query, and device control
+[x] Entity caching in Layer 3 (house namespace, SmartDevice model)
+[x] Confirmation gate for all irreversible device actions (PendingSmartHomeAction)
+[x] Routing integration for SmartHomeAgent
 
+============================================================
+PHASE 8 - IN PROGRESS (Milestone 1 Complete)
+============================================================
+[x] FastAPI server skeleton with HTTPS (self-signed cert auto-generation)
+[x] JWT authentication middleware and login endpoint
+[x] Rate limiting on all endpoints (SlowAPI)
+[x] Local-only binding enforcement (127.0.0.1 default)
+[x] /api/health liveness endpoint
+[ ] Memory query API endpoints (Layer 1-4)
+[ ] ContextSanitizer integration and field whitelisting on API responses
+[ ] Smart Home API endpoints (list, state, action, confirm)
+[ ] Pet API endpoints (list, feed)
+[ ] Reminders API endpoint
+[ ] Mobile companion app (Expo React Native)
+
+============================================================
+PHASE 9 - PLANNED
+============================================================
+[ ] Level 5 continuous learning

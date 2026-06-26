@@ -88,6 +88,18 @@ smart_home:
   url: "${HASS_URL:-http://localhost:8123}"
   token_env_var: "HASS_TOKEN"
 
+# --- Mobile API Server ---
+api:
+  host: "${API_HOST:-127.0.0.1}"
+  port: "${API_PORT:-8000}"
+  ssl_keyfile: "${API_SSL_KEYFILE:-config/certs/key.pem}"
+  ssl_certfile: "${API_SSL_CERTFILE:-config/certs/cert.pem}"
+  username: "${API_USERNAME:-admin}"
+  jwt_secret: "${JWT_SECRET:-super-secret-renine-jwt-key-9862ac08-7b9b}"
+  jwt_expire_minutes: 60
+  rate_limit_limit: 100
+  rate_limit_period_seconds: 60
+
 # --- Feature Flags ---
 features:
   voice_enabled: true
@@ -95,3 +107,5 @@ features:
   vision_enabled: true
   browser_agent_enabled: true
   smart_home_enabled: false
+  api_enabled: true
+

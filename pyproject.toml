@@ -61,6 +61,12 @@ dependencies = [
     "google-auth>=2.29.0",
     "google-auth-oauthlib>=1.2.0",
     "google-api-python-client>=2.130.0",
+
+    # --- Phase 8 Mobile Companion ---
+    "fastapi>=0.110.0",
+    "pyjwt>=2.8.0",
+    "slowapi>=0.1.9",
+    "python-multipart>=0.0.9",
 ]
 
 [project.optional-dependencies]

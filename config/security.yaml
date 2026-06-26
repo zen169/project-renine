@@ -82,3 +82,22 @@ security:
   encryption:
     algorithm: "fernet"
     key_env_var: "FERNET_KEY"
+
+  # --- Mobile API Server ---
+  api:
+    allow_public_interface: false
+    whitelisted_fields:
+      mind:
+        - id
+        - namespace
+        - key
+        - summary
+        - created_at
+        - updated_at
+      personality:
+        - name
+        - relationship
+        - age
+        - birthday
+        - updated_at
+

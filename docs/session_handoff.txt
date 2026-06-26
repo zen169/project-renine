@@ -1,68 +1,77 @@
-﻿============================================================
+============================================================
 RENINE - SESSION HANDOFF
 ============================================================
-Last Updated: 2026-06-25
+Last Updated: 2026-06-26
 
-CURRENT_PHASE: 6
+CURRENT_PHASE: 8
 
-LAST_COMPLETED_TASK: Phase 6 (Web Operations) complete. Implemented BrowserAgent, EmailAgent, NewsAgent, BrowserTool, and external_client. Hardened Gmail OAuth defaults, browser profile cleanup, browser UNTRUSTED content boundaries, Layer 3/4 memory denial tests, dependency declarations, and Electron IPC dispatch. Full suite verified: 256/256 tests passing.
+LAST_COMPLETED_MILESTONE: Phase 8 Milestone 1 — Server Infrastructure & Authentication COMPLETE
 
-NEXT_TASK: Await user instruction. Do NOT start Phase 7 unless explicitly requested.
+LAST_COMPLETED_TASK:
+  Phase 8 Milestone 1 complete. FastAPI server skeleton, self-signed HTTPS
+  certificate generation, JWT authentication, bcrypt password verification,
+  SlowAPI rate limiting, local-only binding enforcement, health endpoint,
+  login endpoint, and 31 unit tests — all passing (31/31).
+
+NEXT_TASK:
+  Phase 8 Milestone 2 — API Endpoints Integration
+    - Memory endpoints (Layer 1-4)
+    - ContextSanitizer field whitelisting
+    - Smart Home endpoints (list, state, action, confirm)
+    - Pet endpoints (list, feed)
+    - Reminders endpoint
+    - Milestone 2 tests
 
 KNOWN_ISSUES:
-  - TD-001: Electron UI inline JS (Low) - Future remediation
-  - TD-002: Audio pipeline VAD not full (Low) - Future remediation
-  - No open Phase 6 bugs.
+  - StarletteDeprecationWarning: httpx / starlette.testclient — upstream
+    library issue, not actionable. Tests still pass.
+  - CORS allow_origins uses pattern strings; will harden when mobile origins known.
 
-RECENT_FILES_MODIFIED:
-  - renine/brain/external_client.py (new)
-  - renine/tools/web/browser_tool.py (new)
-  - renine/agents/browser_agent.py (new)
-  - renine/agents/email_agent.py (new)
-  - renine/agents/news_agent.py (new)
-  - renine/agents/spreadsheet_agent.py (updated path extraction for paths with spaces)
-  - renine/agents/__init__.py (updated)
-  - renine/brain/router.py (updated)
-  - renine/tools/__init__.py (updated)
-  - renine/tools/web/__init__.py (updated)
-  - renine/ui/electron/ipc_handlers.ts (updated Phase 6 dispatch/status)
-  - config/settings.yaml (updated version/email config)
-  - config/tools.yaml (updated browser tool config)
-  - pyproject.toml (updated version/dependencies)
-  - tests/brain/test_external_client.py (new)
-  - tests/tools/test_browser_tool.py (new)
-  - tests/agents/test_browser_agent.py (new)
-  - tests/agents/test_email_agent.py (new)
-  - tests/agents/test_news_agent.py (new)
-  - tests/brain/test_router.py (updated)
-  - tests/ui/test_ipc_phase6_dispatch.py (new)
-  - docs/changelog.txt (updated)
-  - docs/features.txt (updated)
-  - docs/code_map.txt (updated)
-  - docs/folder_structure.txt (updated)
-  - docs/project_state.txt (updated)
-  - docs/session_handoff.txt (updated)
-  - docs/phase_reports/phase_6_report.txt (new)
+RECENT_FILES_MODIFIED (Phase 8 Milestone 1):
+  NEW:
+    api/__init__.py
+    api/auth.py
+    api/rate_limiting.py
+    api/server.py
+    api/endpoints.py
+    tests/api/__init__.py
+    tests/api/test_server.py
+    docs/phase_reports/phase_8_report.md
+  MODIFIED:
+    pyproject.toml (Phase 8 dependencies added)
+    config/settings.yaml (API server config block added)
+    config/security.yaml (API security config block added)
+
+TEST_STATUS:
+  Previous baseline: 359/359 (Phases 1-7)
+  Milestone 1 adds: 31 new tests
+  New total expected: 390/390
+  (Regression verification in progress as of handoff)
 
 DO_NOT:
-  - Do NOT start Phase 7 without explicit user instruction
-  - Do NOT recreate existing Phase 1/2/3/4/5/6 files
-  - Do NOT perform unrelated refactors
+  - Do NOT restart planning or implementation plan
+  - Do NOT recreate Phase 1-7 files
+  - Do NOT begin Milestone 3 (mobile app) before Milestone 2 is complete
+  - Do NOT begin Phase 9
+
+RESUME_COMMAND:
+  "Continue Phase 8 of Project Renine. Milestone 1 is complete (31/31 tests).
+  Begin Milestone 2: Memory API endpoints, ContextSanitizer integration,
+  Smart Home endpoints, Pet endpoints, Reminders endpoint, and tests."
 
 ============================================================
-QUALITY VERIFICATION RESULTS (Phase 6)
+QUALITY VERIFICATION RESULTS (Phase 8 Milestone 1)
 ============================================================
-[OK] ContextSanitizer called on external LLM path
-[OK] Browser content marked UNTRUSTED
-[OK] BrowserAgent denied Layer 3 and Layer 4 memory access
-[OK] Gmail send disabled and blocked
-[OK] Gmail default scope is readonly only
-[OK] Gmail compose scope requires explicit configuration
-[OK] Playwright uses isolated temporary profiles
-[OK] Browser profile cleanup is verified
-[OK] No storage export APIs are used
-[OK] Electron IPC dispatch includes BrowserAgent, EmailAgent, and NewsAgent
-[OK] Full test suite passing: 256/256
+[OK] JWT auth: create + verify + expiry working correctly
+[OK] bcrypt password hashing verified
+[OK] get_current_user raises 401 for missing/invalid/expired tokens
+[OK] /api/health — unauthenticated, returns 200 with version
+[OK] /api/auth/login — correct creds return JWT, wrong creds return 401
+[OK] Host binding: 0.0.0.0 blocked unless allow_public_interface=true
+[OK] Self-signed cert generation creates valid PEM files
+[OK] Rate limit handler returns 429
+[OK] get_default_limit reads from settings.yaml
+[OK] All 31 Milestone 1 tests pass
 
 ============================================================
 SESSION PROTOCOL REMINDER
