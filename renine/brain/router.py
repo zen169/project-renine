@@ -173,6 +173,33 @@ def route(user_input: str, context: list[dict[str, str]] | None = None) -> Route
             metadata={"reason": "browser_keywords"},
         )
 
+    # Phase 7 routing rules
+    sh_keywords = (
+        "sync",
+        "discover",
+        "refresh",
+        "list devices",
+        "show devices",
+        "smart home",
+        "home assistant",
+        "connection",
+        "ping",
+    )
+    has_sh_keyword = any(kw in query for kw in sh_keywords)
+
+    has_status_state_with_entity = (
+        any(kw in query for kw in ("status", "state"))
+        and any("." in token for token in query.split())
+    )
+
+    if has_sh_keyword or has_status_state_with_entity:
+        logger.info("routing_to_smart_home_agent", input=user_input)
+        return RouteDecision(
+            target=RouteTarget.SMART_HOME_AGENT,
+            confidence=1.0,
+            metadata={"reason": "smart_home_keywords"},
+        )
+
     # Fallback to MainBrainAgent
     logger.info(
         "input_routed",

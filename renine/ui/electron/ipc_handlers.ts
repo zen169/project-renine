@@ -70,6 +70,7 @@ from renine.agents.house_agent import HouseAgent
 from renine.agents.browser_agent import BrowserAgent
 from renine.agents.email_agent import EmailAgent
 from renine.agents.news_agent import NewsAgent
+from renine.agents.smart_home_agent import SmartHomeAgent
 
 user_input = ${JSON.stringify(data.text)}
 decision = route(user_input)
@@ -86,6 +87,8 @@ elif decision.target == RouteTarget.EMAIL_AGENT:
     agent = EmailAgent()
 elif decision.target == RouteTarget.NEWS_AGENT:
     agent = NewsAgent()
+elif decision.target == RouteTarget.SMART_HOME_AGENT:
+    agent = SmartHomeAgent()
 else:
     agent = MainBrainAgent()
 

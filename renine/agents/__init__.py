@@ -13,6 +13,7 @@ from renine.agents.vision_agent import VisionAgent
 from renine.agents.browser_agent import BrowserAgent
 from renine.agents.email_agent import EmailAgent
 from renine.agents.news_agent import NewsAgent
+from renine.agents.smart_home_agent import SmartHomeAgent
 
 __all__ = [
     "MainBrainAgent",
@@ -27,5 +28,6 @@ __all__ = [
     "BrowserAgent",
     "EmailAgent",
     "NewsAgent",
+    "SmartHomeAgent",
 ]
 

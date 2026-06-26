@@ -108,6 +108,7 @@ class TestGetSettings:
         """Settings contain expected top-level keys."""
         result = get_settings()
         assert "ollama" in result
+        assert "smart_home" in result
 
 
 class TestGetProjectRoot:

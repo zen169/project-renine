@@ -30,6 +30,8 @@ from renine.databases.models.inventory import InventoryItem
 from renine.databases.models.pets import Pet
 from renine.databases.models.house import HouseItem
 from renine.databases.models.file_index import FileIndex
+from renine.databases.models.smart_device import SmartDevice
+from renine.databases.models.pending_smart_home_action import PendingSmartHomeAction
 
 __all__ = [
     "HistoryBase",
@@ -42,4 +44,6 @@ __all__ = [
     "Pet",
     "HouseItem",
     "FileIndex",
+    "SmartDevice",
+    "PendingSmartHomeAction",
 ]

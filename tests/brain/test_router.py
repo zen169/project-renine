@@ -53,3 +53,28 @@ class TestRoute:
         decision = route("google standard time zone info")
         assert decision.target == RouteTarget.BROWSER_AGENT
 
+    def test_routes_to_smart_home_agent_sync(self) -> None:
+        """Keywords 'sync', 'discover', 'refresh' route to SmartHomeAgent."""
+        assert route("sync devices").target == RouteTarget.SMART_HOME_AGENT
+        assert route("discover entities").target == RouteTarget.SMART_HOME_AGENT
+        assert route("refresh devices").target == RouteTarget.SMART_HOME_AGENT
+
+    def test_routes_to_smart_home_agent_list(self) -> None:
+        """Keywords 'list devices', 'show devices' route to SmartHomeAgent."""
+        assert route("list devices").target == RouteTarget.SMART_HOME_AGENT
+        assert route("show devices").target == RouteTarget.SMART_HOME_AGENT
+
+    def test_routes_to_smart_home_agent_connection(self) -> None:
+        """Keywords 'connection', 'ping' route to SmartHomeAgent."""
+        assert route("connection").target == RouteTarget.SMART_HOME_AGENT
+        assert route("ping").target == RouteTarget.SMART_HOME_AGENT
+
+    def test_routes_to_smart_home_agent_status_state(self) -> None:
+        """Keywords 'status', 'state' route to SmartHomeAgent only if an entity ID is present."""
+        assert route("status light.living_room").target == RouteTarget.SMART_HOME_AGENT
+        assert route("state sensor.temperature").target == RouteTarget.SMART_HOME_AGENT
+
+    def test_routes_to_smart_home_agent_status_without_entity_falls_back(self) -> None:
+        """Keyword 'status' without entity_id does NOT route to SmartHomeAgent."""
+        assert route("status check").target == RouteTarget.MAIN_BRAIN
+

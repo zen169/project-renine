@@ -26,6 +26,7 @@ security:
       - inventory
       - pets
       - house
+      - smart_devices
       - bills
       - calendar_events
       - daily_routines

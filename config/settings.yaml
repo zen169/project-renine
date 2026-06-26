@@ -83,6 +83,11 @@ models:
 email:
   allow_draft_creation: false
 
+# --- Smart Home ---
+smart_home:
+  url: "${HASS_URL:-http://localhost:8123}"
+  token_env_var: "HASS_TOKEN"
+
 # --- Feature Flags ---
 features:
   voice_enabled: true

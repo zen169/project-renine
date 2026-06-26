@@ -25,6 +25,7 @@ def test_ipc_imports_phase6_agents() -> None:
     assert "from renine.agents.browser_agent import BrowserAgent" in source
     assert "from renine.agents.email_agent import EmailAgent" in source
     assert "from renine.agents.news_agent import NewsAgent" in source
+    assert "from renine.agents.smart_home_agent import SmartHomeAgent" in source
 
 
 def test_ipc_dispatches_phase6_route_targets() -> None:
@@ -37,6 +38,8 @@ def test_ipc_dispatches_phase6_route_targets() -> None:
     assert "    agent = EmailAgent()" in source
     assert "elif decision.target == RouteTarget.NEWS_AGENT:" in source
     assert "    agent = NewsAgent()" in source
+    assert "elif decision.target == RouteTarget.SMART_HOME_AGENT:" in source
+    assert "    agent = SmartHomeAgent()" in source
 
 
 def test_ipc_status_reports_phase6() -> None:

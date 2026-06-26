@@ -61,3 +61,19 @@ tools:
   browser:
     enabled: true
     permission_level: 2  # ELEVATED
+
+  # --- Smart Home Tools (Phase 7) ---
+  discover_smart_devices:
+    enabled: true
+    permission_level: 0  # READ_ONLY
+  get_smart_device_status:
+    enabled: true
+    permission_level: 0  # READ_ONLY
+  control_smart_device:
+    enabled: true
+    permission_level: 1  # STANDARD — requires explicit user confirmation
+    allowed_domains:
+      - light
+      - switch
+      - fan
+      - cover
